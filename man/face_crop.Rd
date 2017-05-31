@@ -2,7 +2,7 @@
 % Please edit documentation in R/face_crop.R
 \name{face_crop}
 \alias{face_crop}
-\title{Crop image to face}
+\title{Crop an image to the face}
 \usage{
 face_crop(coords, image, savename = NULL)
 }
@@ -11,17 +11,20 @@ face_crop(coords, image, savename = NULL)
 
 \item{image}{Image name to be cropped}
 
-\item{savename}{File name to save cropped image. Defaults to 'cropped' + \code{image}.png.}
+\item{savename}{File name to save cropped image. Defaults to "cropped_\code{image}.png."}
 }
 \value{
-Saves cropped image.
+Saves cropped image as a \code{.png} image file.
 }
 \description{
-Crop image to face
+Crop an image to the face
 }
 \examples{
 image <- system.file('data','faces.jpg',package = 'quantIm')
 coords <- face_coord(image)
 face_crop(coords,image)
 ...
+}
+\author{
+Daniel N. Albohn
 }

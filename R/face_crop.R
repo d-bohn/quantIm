@@ -1,4 +1,6 @@
-#' Crop image to face
+#' Crop an image to the face
+#'
+#' @author Daniel N. Albohn
 #'
 #' @param coords Face coordinates provided by \code{\link{face_coord}}
 #' @param image Image name to be cropped
@@ -23,8 +25,10 @@ face_crop <- function(coords, image, savename=NULL){
 
   img <- magick::image_read(image)
 
-  w_h_x_y <- paste0(coords[i,'width'],'x',coords[i,'height'],'+',coords[i,'x'],'+',coords[i,'y'])
-  im <- magick::image_crop(img, w_h_x_y[i])
+  for (i in 1:nrow(coords)){
+    w_h_x_y <- paste0(coords[i,'width'],'x',coords[i,'height'],'+',coords[i,'x'],'+',coords[i,'y'])
+    im <- magick::image_crop(img, w_h_x_y[i])
+  }
 
   if (is.null(savename)==TRUE) {
     image_sans <- tools::file_path_sans_ext(image)

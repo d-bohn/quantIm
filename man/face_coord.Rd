@@ -9,9 +9,11 @@ face_coord(python_location = "/usr/local/bin/python", facedetector = NULL,
 }
 \arguments{
 \item{python_location}{The location of your python install. Defaults to
-default install location for MacOS (e.g., \code{'/usr/local/bin/python'}.}
+default install location for MacOS (e.g., \code{'/usr/local/bin/python'}).}
 
-\item{facedetector}{External python script location for obtaining bounding box.}
+\item{facedetector}{External python script location for obtaining bounding box.
+By default, it looks for this in the package's \code{data/} folder, but can
+also manually specify.}
 
 \item{image}{A string specifying the input image to detect face(s) in.}
 }
@@ -23,7 +25,11 @@ coordinates of each face and the width and height of each bonding box
 Face Coordinates
 }
 \examples{
-image <- system.file('data','faces.jpg',package = 'quantIm')
-face_coord(image)
+im <- system.file('data','faces.jpg',package = 'quantIm')
+face_coord(image=im)
+
 ...
+}
+\author{
+Daniel N. Albohn
 }

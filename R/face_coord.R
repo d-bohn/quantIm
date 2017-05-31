@@ -1,5 +1,7 @@
 #' Face Coordinates
 #'
+#' @author Daniel N. Albohn
+#'
 #' @param python_location The location of your python install. Defaults to
 #'default install location for MacOS (e.g., \code{'/usr/local/bin/python'}).
 #' @param facedetector External python script location for obtaining bounding box.
@@ -14,13 +16,15 @@
 #' @examples
 #' im <- system.file('data','faces.jpg',package = 'quantIm')
 #' face_coord(image=im)
+#'
 #' ...
 #' @importFrom stringr str_split
 
 # ##### FOR DEBUGGING NOT RUN
 # python_location='/usr/local/bin/python'
 # facedetector='data/facedetector'
-# image='data/faces.jpg'
+# image=file_list[3]
+# image = file.path('images',file_list[2])
 # #### END DEBUGGING NOT RUN
 
 face_coord <- function(python_location='/usr/local/bin/python', facedetector=NULL, image){
@@ -41,11 +45,14 @@ face_coord <- function(python_location='/usr/local/bin/python', facedetector=NUL
           1) that python and opencv2 are installed, \n
           2) your image has a face in it')
   }
-
-  if (!(class(coord) == 'try-error')) {
+  if (!(class(coord) == 'try-error') & (length(coord) > 0)==TRUE) {
     coords <- coord %>% data.frame(do.call(rbind, stringr::str_split(., '\\s+')))
     names(coords) <- c('Face','x','y','width','height')
     coords$Face <- paste0('face_',seq(1,nrow(coords),1))
+    coords$image <- image
+    return(list(coords))
+  } else {
+    coords <- data.frame('Image'=image)
     return(list(coords))
   }
 }
