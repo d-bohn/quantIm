@@ -33,7 +33,7 @@
 #' @export
 
 #' @examples
-#' image <- system.file('data', 'faces.jpg', package = 'quantIm')
+#' image <- system.file('extdata', 'faces.jpg', package = 'quantIm')
 #' gleam_image <- gleam(image, show=TRUE)
 #' ...
 #' @importFrom EBImage readImage imageData Image display

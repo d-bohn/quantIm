@@ -14,23 +14,23 @@
 #' @export
 #'
 #' @examples
-#' im <- system.file('data','faces.jpg',package = 'quantIm')
+#' im <- system.file('extdata', 'faces.jpg', package = 'quantIm')
 #' face_coord(image=im)
 #'
 #' ...
 #' @importFrom stringr str_split
 
-# ##### FOR DEBUGGING NOT RUN
-# python_location='/usr/local/bin/python'
-# facedetector='data/facedetector'
-# image=file_list[3]
-# image = file.path('images',file_list[2])
-# #### END DEBUGGING NOT RUN
-
 face_coord <- function(python_location='/usr/local/bin/python', facedetector=NULL, image){
 
+  # ##### FOR DEBUGGING NOT RUN
+  # python_location='/usr/local/bin/python'
+  # facedetector='data/facedetector'
+  # image=file_list[3]
+  # image = file.path('images',file_list[2])
+  # #### END DEBUGGING NOT RUN
+
   ## Try to get facedetector from src folder
-  command1 <- paste(python_location, system.file("data", "facedetector", package = "quantIm"), image, sep = ' ')
+  command1 <- paste(python_location, system.file("python", "facedetector", package = "quantIm"), image, sep = ' ')
   coord <- try(
     system(command1, intern = TRUE)
     )

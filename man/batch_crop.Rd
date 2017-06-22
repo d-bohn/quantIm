@@ -2,15 +2,15 @@
 % Please edit documentation in R/batch_crop.R
 \name{batch_crop}
 \alias{batch_crop}
-\title{Title}
+\title{Crop Batches of Images from a Folder}
 \usage{
-batch_crop(file_list, path, save_string, gleam = FALSE, ...)
+batch_crop(file_list, path, save_string, scale = NULL, gleam = FALSE)
 }
 \arguments{
-\item{...}{}
+\item{gleam}{}
 }
 \description{
-Title
+Crop Batches of Images from a Folder
 }
 \examples{
 

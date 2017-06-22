@@ -4,14 +4,20 @@
 \alias{face_crop}
 \title{Crop an image to the face}
 \usage{
-face_crop(coords, image, savename = NULL)
+face_crop(bb, image, savename = NULL, resize = NULL, scale = NULL)
 }
 \arguments{
-\item{coords}{Face coordinates provided by \code{\link{face_coord}}}
-
 \item{image}{Image name to be cropped}
 
 \item{savename}{File name to save cropped image. Defaults to "cropped_\code{image}.png."}
+
+\item{resize}{How much to increase the size of the bounding box by to capture more
+of the face in the image. Defaults to NULL.}
+
+\item{scale}{Width and height to scale the image to. In the format of a character vector of widthxheight
+(e.g., "512x512"). Defaults to NULL.}
+
+\item{coords}{Face coordinates provided by \code{\link{face_coord}}}
 }
 \value{
 Saves cropped image as a \code{.png} image file.

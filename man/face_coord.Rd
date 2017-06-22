@@ -25,7 +25,7 @@ coordinates of each face and the width and height of each bonding box
 Face Coordinates
 }
 \examples{
-im <- system.file('data','faces.jpg',package = 'quantIm')
+im <- system.file('extdata', 'faces.jpg', package = 'quantIm')
 face_coord(image=im)
 
 ...

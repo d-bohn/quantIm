@@ -32,7 +32,7 @@ All of these can be installed from the command line with \code{pip install} on U
 }
 \examples{
 python_location='/usr/local/bin/python'
-image = system.file("data", "defiant2.jpg", package = "quantIm")
+image = system.file("extdata", "defiant2.jpg", package = "quantIm")
 face_landmarks(python_location = python_location, image=image)
 ----
 }

@@ -1,11 +1,14 @@
 Package: quantIm
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Title: Quantitative Assesment of Facial Images
+Version: 0.0.1
+Author: Daniel N. Albohn
+Maintainer: The package maintainer <dna5021@psu.edu>
+Description: An R package for the quantitative assessment of faces from
+    images. This package provides a number of useful utilities for image
+    preprocessing, analysis, and displaying. It is a hodge-podge of
+    wrappers around other packages that make scientific facial image
+    analysis easier.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
