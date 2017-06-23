@@ -14,15 +14,15 @@
 #'
 #' @examples
 face_crop_points <- function(coords, image, points = c(30,28), savename = NULL, scale = 1, wh = NULL){
-  # #### FOR DEGUGGING NOT RUN
-  # setwd('/Volumes/S E/R_Drive/Stim/Neutral_Pre.Post/Pre.Post.Re.2/')
-  # image <- "S001.Post.Anger.jpg"
-  # coords <- face_landmarks(image=image)$face_landmarks
-  # scale = 1
-  # wh = 300
-  # points = c(30,28)
-  # savename = NULL
-  # ### END DEBUGGING NOT RUN
+  #### FOR DEGUGGING NOT RUN
+  setwd('F:/machine_learning/face_image_pixels/images')
+  image <- "CFD-WF-015-006-N.jpg"
+  coords <- face_landmarks(image=image)$face_landmarks
+  scale = 116
+  wh = 300
+  points = c(31,29)
+  savename = NULL
+  ### END DEBUGGING NOT RUN
 
   # Check if it we have numeric values
   coords$x <- as.numeric(as.character(coords$x))
@@ -32,15 +32,18 @@ face_crop_points <- function(coords, image, points = c(30,28), savename = NULL, 
   centerx <- round((coords$x[points[1]]))*scale
   centery <- round((coords$y[points[2]]))*scale
 
+  # Get eye center points
+  left_eye1 <-
+
   # Load and rescale
   percent = scale*100
   img <- magick::image_read(image)
-  img <- magick:::image_scale(img, paste0(percent,'%'))
+  img <- magick::image_scale(img, paste0(percent,'%'))
 
   # Now crop, fool, crop!
   if (is.null(wh)==TRUE) {
     wh <- as.numeric(dim(EBImage::readImage(image))[1])/2
-    message('The image cropping will default to half of it`s width')
+    message('The image cropping will default to half of its width')
   }
 
   wh2 <- paste(wh,wh,sep = 'x')
