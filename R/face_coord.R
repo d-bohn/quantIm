@@ -41,9 +41,9 @@ face_coord <- function(python_location='/usr/local/bin/python', facedetector=NUL
     coord <- system(command2, intern = TRUE)
   }
   if (class(coord) == 'try-error') {
-    print('Error. Please check: \n
-          1) that python and opencv2 are installed, \n
-          2) your image has a face in it')
+    message('Error. Please check:')
+    message('1) that python and opencv2 are installed')
+    message('2) your image has a face in it')
   }
   if (!(class(coord) == 'try-error') & (length(coord) > 0)==TRUE) {
     coords <- coord %>% data.frame(do.call(rbind, stringr::str_split(., '\\s+')))

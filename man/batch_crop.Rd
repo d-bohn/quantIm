@@ -4,10 +4,11 @@
 \alias{batch_crop}
 \title{Crop Batches of Images from a Folder}
 \usage{
-batch_crop(file_list, path, save_string, scale = NULL, gleam = FALSE)
+batch_crop(file_list, path, save_string, dist, wh, points, gleam = FALSE,
+  pad = FALSE)
 }
 \arguments{
-\item{gleam}{}
+\item{pad}{}
 }
 \description{
 Crop Batches of Images from a Folder

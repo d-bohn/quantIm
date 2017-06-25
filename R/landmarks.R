@@ -48,9 +48,9 @@ face_landmarks <- function(python_location='/usr/local/bin/python', image){
     )
 
   if (class(landmarks) == 'try-error') {
-    print('Error. Please check: \n
-          1) that python and the necessary packages are installed, \n
-          2) your image has at least one face in it')
+    message('Error. Please check:')
+    message('1) that python and the necessary packages are installed')
+    message('2) your image has at least one face in it')
   }
   if (!(class(landmarks) == 'try-error') & (length(landmarks) > 0)==TRUE) {
     points <- landmarks[1:68]
@@ -58,7 +58,7 @@ face_landmarks <- function(python_location='/usr/local/bin/python', image){
 
     points <- points %>% data.frame(do.call(rbind, stringr::str_split(., '\\s+'))) %>% .[2:3]
     names(points) <- c('x','y')
-    points$point <- seq(0,nrow(points),1)
+    points$point <- seq(0,(nrow(points)-1),1)
     #points$face <- paste0('face_',seq(1,nrow(points),1))
     points$image <- image
 

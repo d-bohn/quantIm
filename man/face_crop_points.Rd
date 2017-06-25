@@ -7,11 +7,11 @@
 \alias{Albohn}
 \title{Crop image around set of points}
 \usage{
-face_crop_points(coords, image, points = c(30, 28), savename = NULL,
-  scale = 1, wh = NULL)
+face_crop_points(coords = NULL, image, points = c(30, 28),
+  savename = NULL, dist = "116", wh = "512")
 }
 \arguments{
-\item{wh}{}
+\item{dist}{}
 }
 \description{
 Crop image around set of points

@@ -4,6 +4,8 @@
 #' @param path
 #' @param save_string
 #' @param gleam
+#' @param dist
+#' @param pad
 #'
 #' @return
 #' @export
@@ -13,15 +15,21 @@
 #' @importFrom EBImage writeImage
 #' @importFrom tools file_path_sans_ext
 #' @importFrom magrittr "%>%"
+#' @importFrom here here
 
-batch_crop <- function(file_list, path, save_string, scale = NULL, gleam = FALSE){
+batch_crop <- function(file_list, path, save_string, dist, wh, points, gleam = FALSE, pad = FALSE){
 
-  # ### START DEBUGGING NOT RUN ##
-  # setwd('/Volumes/Seagate Expansion Drive/machine_learning/face_image_pixels/')
-  # file_list <- list.files('images/')
-  # path = 'images/'; save_string = '_cropped'
-  # gleam=TRUE; i=1; resize = .4
-  # ### END DEBUGGING NOT RUN ##
+  if(exists('db')==TRUE){
+    ### START DEBUGGING NOT RUN ##
+    path <- '/Volumes/ALBOHN/machine_learning/face_image_pixels/images2/'
+    file_list <- list('004_o_m_a_a.jpg');i=1
+    save_string = '_crop'
+    points = c(30,28)
+    dist = '116'
+    wh='512'
+    gleam=TRUE; pad=TRUE
+    ### END DEBUGGING NOT RUN ##
+  }
 
   wd <- getwd()
   setwd(path)
@@ -34,7 +42,7 @@ batch_crop <- function(file_list, path, save_string, scale = NULL, gleam = FALSE
 
       bb <- as.data.frame(landmarks$bounding_box)
       coords <- as.data.frame(landmarks$face_landmarks)
-      image <- file_list[i]
+      image <- file_list[[i]]
 
       if (!dir.exists('cropped')){
 
@@ -43,8 +51,8 @@ batch_crop <- function(file_list, path, save_string, scale = NULL, gleam = FALSE
         }
 
       save <- paste0(tools::file_path_sans_ext(file_list[i]),save_string,'.png')
-      face_crop_points(coords, image, points = c(31,29), savename = file.path('cropped', save),
-                       scale = scale, wh = '512')
+      face_crop_points(coords, image, points = points, savename = file.path('cropped', save),
+                       dist=dist, wh = wh)
 
       if (gleam==TRUE){
         image2 <- paste0(tools::file_path_sans_ext(save),'.png')
@@ -57,6 +65,17 @@ batch_crop <- function(file_list, path, save_string, scale = NULL, gleam = FALSE
           }
 
         EBImage::writeImage(im, file.path('gleamed',save2), type = "png")
+
+      }
+
+      if (pad==TRUE){
+
+        if (!dir.exists('padded')){
+          dir.create('padded')
+        }
+
+        out <- paste0('padded/',gsub('.png','',save2),'_padded.png')
+        im <- pad_image(image = file.path('gleamed',save2),width=wh,height=wh,out=out)
 
         }
 
