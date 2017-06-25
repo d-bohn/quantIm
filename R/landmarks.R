@@ -58,7 +58,7 @@ face_landmarks <- function(python_location='/usr/local/bin/python', image){
 
     points <- points %>% data.frame(do.call(rbind, stringr::str_split(., '\\s+'))) %>% .[2:3]
     names(points) <- c('x','y')
-    points$point <- seq(1,nrow(points),1)
+    points$point <- seq(0,nrow(points),1)
     #points$face <- paste0('face_',seq(1,nrow(points),1))
     points$image <- image
 
