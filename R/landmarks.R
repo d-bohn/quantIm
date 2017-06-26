@@ -48,6 +48,14 @@ face_landmarks <- function(python_location='/usr/local/bin/python', image){
     )
 
   if (class(landmarks) == 'try-error') {
+    python_location2 <- system('which python', intern = TRUE)
+    command2 <- paste(python_location2, script,'-p', dlib_shape, '-i', image, sep = ' ')
+    landmarks <- try(
+      system(command2, intern=TRUE)
+    )
+  }
+
+  if (class(landmarks) == 'try-error') {
     message('Error. Please check:')
     message('1) that python and the necessary packages are installed')
     message('2) your image has at least one face in it')
