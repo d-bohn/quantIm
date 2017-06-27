@@ -14,7 +14,14 @@
 #'     \item \code{dlib}
 #'     \item \code{numpy}
 #' }
-#' All of these can be installed from the command line with \code{pip install} on Unix systems.
+#' All of these can be installed from the command line with \code{pip install} on Unix systems
+#' except for \code{openCV2} which needs to be downloaded. Additionally, the following
+#' packages must be installed and up to date:
+#'
+#' \item \code{sudo apt-get install cmake}
+#' \item \code{sudo apt-get install libboost-all-dev}
+#' \item \code{sudo apt-get install libmagick++-dev}
+#' \item \code{sudo apt-get install libopencv-dev python-opencv}
 #'
 #' @param python_location The location of your python install. Defaults to
 #'default install location for MacOS (e.g., \code{'/usr/local/bin/python'}).
@@ -24,7 +31,9 @@
 #' as well as the bounding box that the face in the image exists.
 #'
 #' @seealso
-#' \link{http://dlib.net/face_landmark_detection.py.html}
+#' dlib \link{http://dlib.net/face_landmark_detection.py.html}
+#' OpenCV2 \link{http://opencv.org/platforms/}
+#' imagemagick and magick \link{https://ropensci.org/blog/2016/08/23/z-magick-release}
 #'
 #' @export
 #'
@@ -44,7 +53,8 @@ face_landmarks <- function(python_location='/usr/local/bin/python', image){
   command1 <- paste(python_location, script,'-p', dlib_shape, '-i', image, sep = ' ')
 
   landmarks <- try(
-    system(command1, intern = TRUE)
+    system(command1, intern = TRUE),
+    silent = TRUE
     )
 
   if (class(landmarks) == 'try-error') {
