@@ -20,7 +20,8 @@ pad_image <- function(image,width,height,background=NULL,out=NULL){
     ## END DEBUG NOT RUN ##
   }
 
-  if (is.null(system('which magick', intern=TRUE))==TRUE){
+  if (is.null(system('convert -version'))==TRUE){
+
     message('Please install magick for your system.')
 
   } else{

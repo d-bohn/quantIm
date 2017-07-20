@@ -28,7 +28,14 @@ specified in \code{python_location} (see parameters):
     \item \code{dlib}
     \item \code{numpy}
 }
-All of these can be installed from the command line with \code{pip install} on Unix systems.
+All of these can be installed from the command line with \code{pip install} on Unix systems
+except for \code{openCV2} which needs to be downloaded. Additionally, the following
+packages must be installed and up to date:
+
+\item \code{sudo apt-get install cmake}
+\item \code{sudo apt-get install libboost-all-dev}
+\item \code{sudo apt-get install libmagick++-dev}
+\item \code{sudo apt-get install libopencv-dev python-opencv}
 }
 \examples{
 python_location='/usr/local/bin/python'
@@ -37,7 +44,9 @@ face_landmarks(python_location = python_location, image=image)
 ----
 }
 \seealso{
-\link{http://dlib.net/face_landmark_detection.py.html}
+dlib \link{http://dlib.net/face_landmark_detection.py.html}
+OpenCV2 \link{http://opencv.org/platforms/}
+imagemagick and magick \link{https://ropensci.org/blog/2016/08/23/z-magick-release}
 }
 \author{
 Daniel N. Albohn

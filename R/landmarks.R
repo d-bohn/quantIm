@@ -48,7 +48,7 @@
 face_landmarks <- function(python_location='/usr/local/bin/python', image){
 
   ## Try to get try to get the script form the inst/python folder
-  script <- system.file("python","facial_landmarks.py", package = "quantIm")
+  script <- system.file("python", "facial_landmarks.py", package = "quantIm")
   dlib_shape <- system.file("extdata", "shape_predictor_68_face_landmarks.dat", package = "quantIm")
   command1 <- paste(python_location, script,'-p', dlib_shape, '-i', image, sep = ' ')
 
