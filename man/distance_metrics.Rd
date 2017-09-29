@@ -4,7 +4,7 @@
 \alias{distance_metrics}
 \title{Obtain Various Distance Metrics Between Two Images}
 \usage{
-distance_metrics(target, reference, save_id = NULL)
+distance_metrics(target, reference, save_id = NULL, to_file = TRUE)
 }
 \arguments{
 \item{target}{Path to an image.}
@@ -13,6 +13,8 @@ distance_metrics(target, reference, save_id = NULL)
 
 \item{save_id}{Regular expression to extract ID from file name. Defaults
 to full path provided for file if \code{NULL}.}
+
+\item{to_file}{Logical. Should results be written to file or printed in console?}
 }
 \value{
 Returns dataframe with various distance metrics. See details for
