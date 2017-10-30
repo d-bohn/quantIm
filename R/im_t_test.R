@@ -12,12 +12,16 @@
 #'
 #' @examples
 
-im_t_test <- function(path, pattern1='*.csv', name){
+im_t_test <- function(path=NULL, pattern1='*.csv', name){
   library(dplyr)
-  wd <- getwd()
-  #setwd(path)
+  # wd <- getwd()
+  # setwd(path)
 
-  files <- list.files(path = here::here(path), pattern = pattern1)
+  if(is.null(path)){
+    path <- here::here('subtracted')
+  }
+
+  files <- list.files(path = path, pattern = pattern1, full.names = TRUE)
 
   #setwd(path)
   list <- list2env(

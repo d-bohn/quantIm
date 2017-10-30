@@ -4,11 +4,11 @@
 \alias{im_sub}
 \title{Subtract two images}
 \usage{
-im_sub(image1, image2, folder1 = NULL, folder2 = NULL, path,
-  resize = FALSE, write.data = TRUE, sub = "default")
+im_sub(image1, image2, folder1 = NULL, folder2 = NULL, path = NULL,
+  resize = FALSE, write.data = TRUE, sub = "default", blur = NULL)
 }
 \arguments{
-\item{sub}{}
+\item{blur}{}
 }
 \description{
 Subtract two images

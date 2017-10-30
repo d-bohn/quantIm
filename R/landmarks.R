@@ -9,19 +9,21 @@
 #' The following python modules must be installed and accessible to the version of python
 #' specified in \code{python_location} (see parameters):
 #' \itemize{
-#'     \item \code{imutils}
-#'     \item\code{cv2}
-#'     \item \code{dlib}
-#'     \item \code{numpy}
+#'     \item{\code{imutils}}
+#'     \item{\code{cv2}}
+#'     \item{\code{dlib}}
+#'     \item{\code{numpy}}
 #' }
 #' All of these can be installed from the command line with \code{pip install} on Unix systems
 #' except for \code{openCV2} which needs to be downloaded. Additionally, the following
 #' packages must be installed and up to date:
 #'
-#' \item \code{sudo apt-get install cmake}
-#' \item \code{sudo apt-get install libboost-all-dev}
-#' \item \code{sudo apt-get install libmagick++-dev}
-#' \item \code{sudo apt-get install libopencv-dev python-opencv}
+#' \itemize{
+#'     \item{\code{sudo apt-get install cmake}}
+#'    \item{\code{sudo apt-get install libboost-all-dev}}
+#'    \item{\code{sudo apt-get install libmagick++-dev}}
+#'    \item{\code{sudo apt-get install libopencv-dev python-opencv}}
+#'}
 #'
 #' @param python_location The location of your python install. Defaults to
 #'default install location for MacOS (e.g., \code{'/usr/local/bin/python'}).

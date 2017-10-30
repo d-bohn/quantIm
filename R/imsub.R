@@ -8,6 +8,7 @@
 #' @param resize
 #' @param write.data
 #' @param sub
+#' @param blur
 #'
 #' @return
 #' @export
@@ -17,21 +18,35 @@
 #' @importFrom here here
 #' @importFrom tools file_path_sans_ext
 #' @importFrom readr parse_number
+#' @importFrom spatstat blur as.im
 #'
 #' @examples
 
-im_sub <- function(image1, image2, folder1=NULL, folder2=NULL, path,
-                   resize = FALSE, write.data = TRUE, sub='default'){
+im_sub <- function(image1, image2, folder1=NULL, folder2=NULL, path=NULL,
+                   resize = FALSE, write.data = TRUE, sub='default',
+                   blur=NULL){
+
+  if(is.null(path)){
+    path <- here::here()
+  }
   # library(dplyr)
-  wd <- getwd()
+  # wd <- getwd()
   # setwd(path)
 
   if(is.null(folder1)){
-    im1 <- EBImage::readImage(here::here(path,image1))
-    im2 <- EBImage::readImage(here::here(path,image2))
+    im1 <- EBImage::readImage(file.path(path, image1))
+    im2 <- EBImage::readImage(file.path(path, image2))
   } else{
-    im1 <- EBImage::readImage(here::here(path,folder1,image1))
-    im2 <- EBImage::readImage(here::here(path,folder2,image2))
+    im1 <- EBImage::readImage(file.path(folder1,image1))
+    im2 <- EBImage::readImage(file.path(folder2,image2))
+  }
+
+  if(!is.null(blur)){
+    im1_blur <- spatstat::blur(spatstat::as.im(im1@.Data), blur)
+    im1 <- EBImage::as.Image(im1_blur$v)
+
+    im2_blur <- spatstat::blur(spatstat::as.im(im2@.Data), blur)
+    im2 <- EBImage::as.Image(im2_blur$v)
   }
 
   out <- im1 - im2
@@ -55,8 +70,8 @@ im_sub <- function(image1, image2, folder1=NULL, folder2=NULL, path,
     }
   }
 
-  if(!(dir.exists((here::here(path, 'subtracted'))))){
-    dir.create(here::here(path, 'subtracted'))
+  if(!(dir.exists((file.path(path, 'subtracted'))))){
+    dir.create(file.path(path, 'subtracted'))
   }
 
   if(write.data == TRUE){
@@ -71,7 +86,7 @@ im_sub <- function(image1, image2, folder1=NULL, folder2=NULL, path,
     #             append = FALSE, col.names = TRUE, row.names = FALSE)
 
     # data.table::fwrite(df, file = here::here('data','image_data',paste0('subject_',sub,'_subtracted.csv')))
-    data.table::fwrite(df, file = here::here(path, 'subtracted', paste0(sub,'_subtracted.csv')))
+    data.table::fwrite(df, file = file.path(path, 'subtracted', paste0(sub,'_subtracted.csv')))
   }
 
   if(resize == TRUE){
@@ -79,7 +94,7 @@ im_sub <- function(image1, image2, folder1=NULL, folder2=NULL, path,
   }
 
   #image(EBImage::flip(out))
-  EBImage::writeImage(out, here::here(path, 'subtracted', paste0(sub,'_subtracted.jpg')))
+  EBImage::writeImage(out, file.path(path, 'subtracted', paste0(sub,'_subtracted.jpg')))
 
   #(imager::imshift(pt2)-pre2) %>% plot(frame=2,main="Difference betw. frames 2 and 1")
   #setwd(wd)

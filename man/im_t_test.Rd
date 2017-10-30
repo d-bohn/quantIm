@@ -4,7 +4,7 @@
 \alias{im_t_test}
 \title{Compute t-test on multiple images}
 \usage{
-im_t_test(path, pattern1 = "*.csv", name)
+im_t_test(path = NULL, pattern1 = "*.csv", name)
 }
 \arguments{
 \item{name}{}

@@ -1,9 +1,10 @@
 #' Create heatmap image from t-values
 #'
-#' @param path
-#' @param file
-#' @param base_image
-#' @param mask
+#' @param path Absolute path to t-values file from working directory
+#' @param file Name of actual image
+#' @param base_image Relative path to base image file (in \code{.jpg} or \code{.png} format).
+#' @param mask Relative path to mask image file (in \code{.jpg} or \code{.png} format). Defaults
+#' to \code{NULL}.
 #' @param thresh
 #'
 #' @return
@@ -16,18 +17,27 @@
 #' @importFrom EBImage readImage
 #' @importFrom data.table fread
 #' @importFrom tools file_ext
+#' @importFrom grid rasterGRob
 #'
 #' @examples
 
-im_heatmap <- function(path, file = paste0(name,"_average_t_values.csv"), base_image, mask=NULL, thresh=1.96){
+im_heatmap <- function(path=NULL, name, file = NULL, base_image,
+                       mask=NULL, thresh=1.96){
 
-  ext <- tools::file_ext(base_image)
+  if(is.null(path)){
+    path <- here::here()
+  }
+  if (is.null(file)){
+    file = paste0(name,"_average_t_values.csv")
+  }
+
+  ext <- tools::file_ext(file.path(path,base_image))
   if((ext == 'png') == TRUE){
-    image <- png::readPNG(here::here(base_image))
-    img <- rasterGrob(image, interpolate=TRUE)
+    image <- png::readPNG(file.path(path,base_image))
+    img <- grid::rasterGrob(image, interpolate=TRUE)
   } else if ((ext=='jpg')==TRUE){
-    image <- jpeg::readJPEG(here::here(base_image))
-    img <- rasterGrob(image, interpolate=TRUE)
+    image <- jpeg::readJPEG(file.path(path,base_image))
+    img <- grid::rasterGrob(image, interpolate=TRUE)
   } else {
     message ('Please supply either a .jpg or .png picture file.')
     break
@@ -36,16 +46,16 @@ im_heatmap <- function(path, file = paste0(name,"_average_t_values.csv"), base_i
   mext <- tools::file_ext(mask)
   if (!is.null(mask)){
     if((mext == 'png') == TRUE){
-      mask_im <- EBImage::readImage(mask)
+      mask_im <- EBImage::readImage(file.path(path,mask))
     } else if ((mext=='jpg')==TRUE){
-      mask_im <- EBImage::readImage(mask)
+      mask_im <- EBImage::readImage(file.path(path,mask))
     } else {
       message ('Please supply either a .jpg or .png mask file.')
       break
     }
   }
 
-  df <- data.table::fread(here::here(path,file))
+  df <- data.table::fread(file.path(path,file))
   mat <- data.matrix(df)
   mat2 <- mat*mask_im
 
@@ -61,7 +71,7 @@ im_heatmap <- function(path, file = paste0(name,"_average_t_values.csv"), base_i
 
   data2$z2 <- ifelse(abs(data2$z) <= thresh, NA, data2$z)
 
-  g <- rasterGrob(image)
+  g <- grid::rasterGrob(image)
 
   plot <- ggplot(data2, aes(x = y, y = x, fill = z2)) +
     # annotation_custom(rasterGrob(image, width=unit(1,"npc"), height=unit(1,"npc")),
@@ -86,12 +96,12 @@ im_heatmap <- function(path, file = paste0(name,"_average_t_values.csv"), base_i
       axis.ticks.y=element_blank(),
       plot.background = element_rect(fill = "transparent",colour = NA)
     )
-  plot
+  #plot
 
   height = dim(image)[1]*2 + ((dim(image)[1]*2)-((dim(image)[1]*2)*.95))
   width = dim(image)[2]*2 + ((dim(image)[2]*2)-((dim(image)[2]*2)*.90))
 
-  png(here::here(path,paste0(name,"_heatmap.png")),
+  png(file.path(path,paste0(name,"_heatmap.png")),
       height = height, width = width, res = 300, units = "px")
   plot
   dev.off()

@@ -10,18 +10,26 @@
 #' which distance measures are includes.
 #'
 #' @details The following distance metrics are computed:
-#' nrmse= Normalized root mean squred error from python \code{skimage.measure}
-#' module (must be installed prior to use),
-#' psnr = Peak Signal-to-Noise ration from python \code{skimage.measure} module (must be installed priot to use),
-#' ssim = Structural similarity index from python \code{skimage.measure} module (must be installed prior to use),
-#' sim_reg = Similarity metric from \code{\link{RNiftyReg::similarity}},
-#' dtw = Dynamic Time Warping distance from \code{\link{dtwclust::dtw_lb}},
-#' fdtw = NULL,
-#' \link{https://pypi.python.org/pypi/fastdtw} (must be installed prior to use),
-#' fourier = Fast Fourier Transform distance from \code{\link{TSdist::FourierDistance}},
-#' emd = Earth Mover's Distance computed from
-#' \link{https://github.com/garydoranjr/pyemd} (must be installed prior to use),
-#' dissim = NULL.
+#' \itemize{
+#' \item{nrmse= Normalized root mean squred error from python \code{skimage.measure}
+#' module (must be installed prior to use)},
+#' \item{psnr = Peak Signal-to-Noise ration from python \code{skimage.measure} module
+#' (must be installed priot to use)},
+#' \item{ssim = Structural similarity index from python \code{skimage.measure} module
+#' (must be installed prior to use)},
+#' \item{sim_reg = Similarity metric from \code{\link{RNiftyReg::similarity}}},
+#' \item{dtw = Dynamic Time Warping distance from \code{\link{dtwclust::dtw_basic}}},
+#' \item{fdtw = NULL (depreciated),
+#' \link{https://pypi.python.org/pypi/fastdtw} (must be installed prior to use)},
+#' \item{fourier = Fast Fourier Transform distance from \code{\link{TSdist::FourierDistance}}},
+#' \item{emd = Earth Mover's Distance computed from
+#' \link{https://github.com/garydoranjr/pyemd} (must be installed prior to use)},
+#' \item{dissim = NULL (depreciated)}
+#' \item{shape_extraction = Time-series shape extraction based on optimal
+#' alignments \code{\link{dtwclus::shape_extraction}}},
+#' \item{dtw2 = Dynamic Time Warping distance from \code{\link{dtwclust::dtw_lb}}}.
+#' }
+
 #'
 #'All of the required python packages used for this function can be installed by running the
 #'setup function \code{quantIm::initialize_quantIm()}. Note that this setup function only works for
@@ -95,12 +103,17 @@ distance_metrics <- function(target, reference, save_id = NULL, to_file = TRUE){
   if (require(dtwclust)==FALSE){
     require(dtwclust)
   }
-  dtw <- dtwclust::dtw_lb(target_c,reference_c, window.size = 1000L)
+  dtw <- dtwclust::dtw_basic(target_c, reference_c, window.size = 512L)
+  dtw2 <- dtwclust::dtw_lb(target_c, reference_c, window.size = 512L)
+  # shape_extraction <- dtwclust::shape_extraction(target_c, reference_c, znrom=TRUE)
+  shape_extraction <- NA
 
   fourier <- TSdist::FourierDistance(target_c,reference_c)
 
-  data <- tibble::tribble(~target, ~reference, ~nrmse, ~psnr, ~ssim, ~sim_reg, ~dtw, ~fdtw, ~dissim, ~fourier, ~emd,
-                          t_name, r_name, nrmse, psnr, ssim, sim_reg, dtw, fdtw, dissim, fourier, emd)
+  data <- tibble::tribble(~target, ~reference, ~nrmse, ~psnr, ~ssim, ~sim_reg, ~dtw,
+                          ~fdtw, ~dissim, ~fourier, ~emd, ~shape_extraction, ~dtw2,
+                          t_name, r_name, nrmse, psnr, ssim, sim_reg, dtw, fdtw,
+                          dissim, fourier, emd, shape_extraction, dtw2)
 
   #data <- as.data.frame(data)
 
