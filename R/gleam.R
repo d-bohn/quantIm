@@ -40,7 +40,7 @@
 #'
 gleam <- function(image, tau=(1/2.2), show=FALSE) {
   im <- EBImage::readImage(image)
-  if(dim(im) == 3){
+  if(dim(im)[[3]] == 3){
     red <- (EBImage::imageData(im)[,,1])^tau
     green <- (EBImage::imageData(im)[,,2])^tau
     blue <- (EBImage::imageData(im)[,,3])^tau
