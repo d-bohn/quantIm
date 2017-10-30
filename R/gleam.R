@@ -40,10 +40,16 @@
 #'
 gleam <- function(image, tau=(1/2.2), show=FALSE) {
   im <- EBImage::readImage(image)
-  red <- (EBImage::imageData(im)[,,1])^tau
-  green <- (EBImage::imageData(im)[,,2])^tau
-  blue <- (EBImage::imageData(im)[,,3])^tau
-  im2 <- Image((1/3)*(red+green+blue))
+  if(dim(im) == 3){
+    red <- (EBImage::imageData(im)[,,1])^tau
+    green <- (EBImage::imageData(im)[,,2])^tau
+    blue <- (EBImage::imageData(im)[,,3])^tau
+    im2 <- Image((1/3)*(red+green+blue))
+  }
+  else{
+    im2 <- im
+    message(image,' does not have 3 channels. Writting original file to disk.')
+  }
   if (show==TRUE){
     EBImage::display(im2)
   }
