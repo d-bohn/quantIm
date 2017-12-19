@@ -47,7 +47,7 @@
 #' @importFrom stringr str_split
 #' @importFrom magrittr "%>%"
 #'
-face_landmarks <- function(python_location='/usr/local/bin/python', image){
+face_landmarks <- function(python_location='/usr/local/bin/python2', image){
 
   ## Try to get try to get the script form the inst/python folder
   script <- system.file("python", "facial_landmarks.py", package = "quantIm")

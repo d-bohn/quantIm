@@ -33,13 +33,13 @@ initialize_quantIm <- function(){
   }
 
   message('The following packages will attempt to install: ',
-    'python-pip, cmake, imutils, libboost, dlib, fastdtw, pyemd, scikit-image, numpy, scipy, matplotlib'
+    'python-pip, cmake, imutils, libboost, dlib, pyemd, scikit-image, numpy, scipy, matplotlib'
   )
 
   if ((os=='osx')==TRUE){
     system('brew install pip')
     system('brew install cmake')
-    system('brew install boost --with-python')
+    system('brew install boost')
     system('brew install boost-python')
   }
   if ((os=='linux')==TRUE){
@@ -48,12 +48,14 @@ initialize_quantIm <- function(){
     system('apt-get install cmake')
   }
 
-  system('pip install imutils')
-  system('pip install dlib')
-  system('pip install fastdtw')
-  system('pip install -e git+https://github.com/garydoranjr/pyemd.git#egg=pyemd')
-  system('pip install scikit-image')
-  system('pip install --user numpy scipy matplotlib')
+  system('pip2 install imutils numpy scipy matplotlib dlib scikit-image')
+  # system('pip2 install dlib')
+  # system('pip install fastdtw')
+  # system('pip2 install scikit-image')
+  # system('pip2 install --user numpy scipy matplotlib')
+  system('pip2 install -e git+https://github.com/garydoranjr/pyemd.git#egg=pyemd')
+  system('pip2 install -e git+https://github.com/pathak22/pyflow.git#egg=pyflow')
+  # Install pyflow from https://github.com/pathak22/pyflow
 
 }
 

@@ -17,7 +17,7 @@
 #' @importFrom EBImage readImage
 #' @importFrom data.table fread
 #' @importFrom tools file_ext
-#' @importFrom grid rasterGRob
+#' @importFrom grid rasterGrob
 #'
 #' @examples
 

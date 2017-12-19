@@ -5,6 +5,7 @@
 #' @param save_id Regular expression to extract ID from file name. Defaults
 #' to full path provided for file if \code{NULL}.
 #' @param to_file Logical. Should results be written to file or printed in console?
+#' @param python Which installation of python should be used?
 #'
 #' @return Returns dataframe with various distance metrics. See details for
 #' which distance measures are includes.
@@ -19,15 +20,14 @@
 #' (must be installed prior to use)},
 #' \item{sim_reg = Similarity metric from \code{\link{RNiftyReg::similarity}}},
 #' \item{dtw = Dynamic Time Warping distance from \code{\link{dtwclust::dtw_basic}}},
-#' \item{fdtw = NULL (depreciated),
+#' \item{dtw2 = Two-dimensional dynamic time warp from \code{link{dtw::dtw}}},
 #' \link{https://pypi.python.org/pypi/fastdtw} (must be installed prior to use)},
 #' \item{fourier = Fast Fourier Transform distance from \code{\link{TSdist::FourierDistance}}},
 #' \item{emd = Earth Mover's Distance computed from
 #' \link{https://github.com/garydoranjr/pyemd} (must be installed prior to use)},
-#' \item{dissim = NULL (depreciated)}
 #' \item{shape_extraction = Time-series shape extraction based on optimal
 #' alignments \code{\link{dtwclus::shape_extraction}}},
-#' \item{dtw2 = Dynamic Time Warping distance from \code{\link{dtwclust::dtw_lb}}}.
+#' \item{dtwlb = Dynamic Time Warping distance from \code{\link{dtwclust::dtw_lb}}}.
 #' }
 
 #'
@@ -49,7 +49,7 @@
 #' @importFrom EBImage readImage
 #' @importFrom tools file_path_sans_ext
 #'
-distance_metrics <- function(target, reference, save_id = NULL, to_file = TRUE){
+distance_metrics <- function(target, reference, save_id = NULL, to_file = TRUE, python = NULL){
 
   if(exists('db')==TRUE){
     #### FOR DEGUGGING NOT RUN
@@ -57,8 +57,12 @@ distance_metrics <- function(target, reference, save_id = NULL, to_file = TRUE){
     target = here::here('inst/extdata/subject_nr_1002.png')
     reference = here::here('inst/extdata/include_total.png')
     to_file = TRUE
+    python = NULL
     ### END DEBUGGING NOT RUN
   }
+
+  quantIm::find_python(python)
+
 
   # Read them images, gurl
   if (is.null(save_id)==TRUE){
@@ -77,45 +81,38 @@ distance_metrics <- function(target, reference, save_id = NULL, to_file = TRUE){
   ski <- reticulate::import('skimage.measure')
   np <- reticulate::import('numpy')
   scipy.euc <- reticulate::import('scipy.spatial.distance')
-  fastdtw <- reticulate::import('fastdtw')
-  EMD <- reticulate::import('emd')
+  # fastdtw <- reticulate::import('fastdtw')
+  # cv <- reticulate::import('cv2')
 
-  nrmse <- ski$compare_nrmse(target,reference)
-  psnr <- ski$compare_psnr(target,reference)
-  ssim <- ski$compare_ssim(target,reference)
-  emd <- EMD$emd(target,reference)
+  nrmse <- ski$compare_nrmse(target@.Data,reference@.Data)
+  psnr <- ski$compare_psnr(target@.Data,reference@.Data)
+  ssim <- ski$compare_ssim(target@.Data,reference@.Data)
+  #emd <- cv$CalcEMD2(target@.Data,reference@.Data)
 
   ## Borrow from fMRI
   sim_reg <- RNiftyReg::similarity(target,reference)
+  dtw <- dtw::dtw(target@.Data, reference@.Data, dist.method = "Manhattan")[['distance']]
+  dtwN <- dtw::dtw(target@.Data, reference@.Data, dist.method = "Manhattan")[['normalizedDistance']]
 
-  # C-c-c'mon, Morty, Get measures from the long form data, Morty
-  target_c <- c(target)
-  reference_c <- c(reference)
+  ## C-c-c'mon, Morty, Get measures from the long form data, Morty
+  target_c <- c(target@.Data)
+  reference_c <- c(reference@.Data)
 
-  #fdtw <- unlist(fastdtw$fastdtw(target_c,reference_c, dist=scipy.euc$euclidean)[1])
-  fdtw <- NA
+  # dtw <- TSdist::DTWDistance(target_c, reference_c, sigma=30)
+  #
+  # if (!('dtwclust' %in% loadedNamespaces())){
+  #   require(dtwclust)
+  # }
+  #
+  # dtw <- dtwclust::dtw_basic(target_c, reference_c, window.size = 512L)
+  # dtwlb <- dtwclust::dtw_lb(target_c, reference_c, window.size = 512L)
+  #
+  # fourier <- TSdist::FourierDistance(target_c,reference_c)
 
-  #dissim <- TSdist::DissimDistance(target_c,reference_c)
-  dissim <- NA
-  #dtw <- dtw::dtw(target_c,reference_c)
-  #dtw2 <- rucrdtw::ucrdtw_vv(target_c, reference_c, .05)
-  #dtw <- TSdist::DTWDistance(target_c, reference_c, sigma=30)
-  if (require(dtwclust)==FALSE){
-    require(dtwclust)
-  }
-  dtw <- dtwclust::dtw_basic(target_c, reference_c, window.size = 512L)
-  dtw2 <- dtwclust::dtw_lb(target_c, reference_c, window.size = 512L)
-  # shape_extraction <- dtwclust::shape_extraction(target_c, reference_c, znrom=TRUE)
-  shape_extraction <- NA
-
-  fourier <- TSdist::FourierDistance(target_c,reference_c)
-
-  data <- tibble::tribble(~target, ~reference, ~nrmse, ~psnr, ~ssim, ~sim_reg, ~dtw,
-                          ~fdtw, ~dissim, ~fourier, ~emd, ~shape_extraction, ~dtw2,
-                          t_name, r_name, nrmse, psnr, ssim, sim_reg, dtw, fdtw,
-                          dissim, fourier, emd, shape_extraction, dtw2)
-
-  #data <- as.data.frame(data)
+  data <- tibble::tribble(## Columns
+    ~target, ~reference, ~nrmse, ~psnr, ~ssim, ~sim_reg, ~dtw,~dtwN,
+    ## Values
+    t_name, r_name, nrmse, psnr, ssim, sim_reg, dtw, dtwN)
 
   if (to_file==TRUE){
     if(!file.exists(here::here('distance_metrics.csv'))){

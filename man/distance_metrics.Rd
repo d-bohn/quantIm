@@ -4,7 +4,8 @@
 \alias{distance_metrics}
 \title{Obtain Various Distance Metrics Between Two Images}
 \usage{
-distance_metrics(target, reference, save_id = NULL, to_file = TRUE)
+distance_metrics(target, reference, save_id = NULL, to_file = TRUE,
+  python = NULL)
 }
 \arguments{
 \item{target}{Path to an image.}
@@ -15,6 +16,8 @@ distance_metrics(target, reference, save_id = NULL, to_file = TRUE)
 to full path provided for file if \code{NULL}.}
 
 \item{to_file}{Logical. Should results be written to file or printed in console?}
+
+\item{python}{Which installation of python should be used?}
 }
 \value{
 Returns dataframe with various distance metrics. See details for
@@ -22,32 +25,6 @@ which distance measures are includes.
 }
 \description{
 Obtain Various Distance Metrics Between Two Images
-}
-\details{
-The following distance metrics are computed:
-\itemize{
-\item{nrmse= Normalized root mean squred error from python \code{skimage.measure}
-module (must be installed prior to use)},
-\item{psnr = Peak Signal-to-Noise ration from python \code{skimage.measure} module
-(must be installed priot to use)},
-\item{ssim = Structural similarity index from python \code{skimage.measure} module
-(must be installed prior to use)},
-\item{sim_reg = Similarity metric from \code{\link{RNiftyReg::similarity}}},
-\item{dtw = Dynamic Time Warping distance from \code{\link{dtwclust::dtw_basic}}},
-\item{fdtw = NULL (depreciated),
-\link{https://pypi.python.org/pypi/fastdtw} (must be installed prior to use)},
-\item{fourier = Fast Fourier Transform distance from \code{\link{TSdist::FourierDistance}}},
-\item{emd = Earth Mover's Distance computed from
-\link{https://github.com/garydoranjr/pyemd} (must be installed prior to use)},
-\item{dissim = NULL (depreciated)}
-\item{shape_extraction = Time-series shape extraction based on optimal
-alignments \code{\link{dtwclus::shape_extraction}}},
-\item{dtw2 = Dynamic Time Warping distance from \code{\link{dtwclust::dtw_lb}}}.
-}
-
-All of the required python packages used for this function can be installed by running the
-setup function \code{quantIm::initialize_quantIm()}. Note that this setup function only works for
-UNIX based operating systems (not Windows).
 }
 \examples{
 

@@ -4,7 +4,7 @@
 \alias{face_landmarks}
 \title{Detect Face Landmarks and Bounding Box}
 \usage{
-face_landmarks(python_location = "/usr/local/bin/python", image)
+face_landmarks(python_location = "/usr/local/bin/python2", image)
 }
 \arguments{
 \item{python_location}{The location of your python install. Defaults to

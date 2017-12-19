@@ -4,8 +4,8 @@
 \alias{im_heatmap}
 \title{Create heatmap image from t-values}
 \usage{
-im_heatmap(path = NULL, name, file = paste0(name, "_average_t_values.csv"),
-  base_image, mask = NULL, thresh = 1.96)
+im_heatmap(path = NULL, name, file = NULL, base_image, mask = NULL,
+  thresh = 1.96)
 }
 \arguments{
 \item{path}{Absolute path to t-values file from working directory}
