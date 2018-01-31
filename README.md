@@ -1,6 +1,9 @@
 # quantIm
 An R package for the **quant**itative assessment of **im**ages.
 
+***DISCLAIMER***
+This package is currently in pre-pre-beta. It is a host of personal functions I wrote for specific projects that I find myself reusing over and over again. I have only tested it on UNIX systems.
+
 ## Quick Start
 In order to use this package, a valid installation of the package manager software [conda](https://conda.io/) must be installed. `quantIm` sets up a specific enviornment for the package (much like RStudio's [`tensorflow`](https://github.com/rstudio/tensorflow), and will install all of the necessary packages for the various functions (mostly python packages).
 
