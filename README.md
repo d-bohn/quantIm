@@ -11,7 +11,7 @@ In order to use this package, a valid installation of the package manager softwa
     install_quantIm()
 
 ## Package Motivation
-The motivation to compile this package are entirely selfish. The `R` ecosystem has a number of excellent image manipulation packages (e.g., `imager`, `EBImage` and `magick`), however, they all do different things. This leaves the user to navigate a different packages for specific tasks, running the risk of incompatible data structures and non-reproducibility.
+The motivation to compile this package are entirely selfish. The `R` ecosystem has a number of excellent image manipulation packages (e.g., `imager`, `EBImage` and `magick`), however, they all do different things. This leaves the user to navigate different packages for specific tasks, running the risk of incompatible data structures and non-reproducibility.
 
 `quantIm` attempts to provide convenient wrappers around some common functions data scientists and computer vision researchers might utilize often when manipulating/assessing images. Additionally, with the implementation of RStudio's wonderful [`reticulate`](https://github.com/rstudio/reticulate) package, `quantIm` provides wrappers around some common computer vision functions written in python.
 
