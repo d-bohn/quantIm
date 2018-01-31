@@ -5,7 +5,7 @@
 \title{Crop Batches of Images from a Folder}
 \usage{
 batch_crop(file_list, path, save_string, dist, wh, points, gleam = FALSE,
-  pad = FALSE)
+  pad = FALSE, ...)
 }
 \arguments{
 \item{pad}{}

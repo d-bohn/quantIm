@@ -4,10 +4,10 @@
 \alias{find_python}
 \title{Helper function to find python on user system}
 \usage{
-find_python(python)
+find_python(python, condaenv)
 }
 \arguments{
-\item{python}{}
+\item{condaenv}{}
 }
 \description{
 Helper function to find python on user system

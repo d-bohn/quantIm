@@ -11,7 +11,6 @@
 #' (e.g., "512x512"). Defaults to NULL.
 #'
 #' @return Saves cropped image as a \code{.png} image file.
-#' @export
 #'
 #' @examples
 #' image <- system.file('data','faces.jpg',package = 'quantIm')

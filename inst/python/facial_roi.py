@@ -1,15 +1,10 @@
+# import the necessary packages
 from imutils import face_utils
 import numpy as np
 import argparse
 import imutils
 import dlib
 import cv2
-import rpy2.robjects.numpy2ri
-
-## DEBUG START ##
-#shape_predictor = '/Users/dalbohn/Documents/R_packages/quantIm/inst/extdata/shape_predictor_68_face_landmarks.dat'
-#img = '/Users/dalbohn/Documents/R_packages/quantIm/inst/extdata/nm0000100_rm46373120_1955-1-6_2003.jpg'
-## DEBUG END ##
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -19,15 +14,20 @@ ap.add_argument("-i", "--image", required=True,
 	help="path to input image")
 args = vars(ap.parse_args())
 
+## DEBUG START ##
+shape_predictor = '/Users/dalbohn/Documents/R_packages/quantIm/inst/extdata/shape_predictor_68_face_landmarks.dat'
+img = '/Users/dalbohn/Documents/R_packages/quantIm/inst/extdata/nm0000114_rm129141504_1957-12-13_2009.jpg'
+## DEBUG END ##
+
 # initialize dlib's face detector (HOG-based) and then create
 # the facial landmark predictor
 detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor(args["shape_predictor"])
-#predictor = dlib.shape_predictor(shape_predictor)
+#predictor = dlib.shape_predictor(args["shape_predictor"])
+predictor = dlib.shape_predictor(shape_predictor)
 
 # load the input image, resize it, and convert it to grayscale
-image = cv2.imread(args["image"])
-#image = cv2.imread(img)
+#image = cv2.imread(args["image"])
+image = cv2.imread(img)
 #image = imutils.resize(image, width=500)
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -44,21 +44,20 @@ for (i, rect) in enumerate(rects):
 
 	# convert dlib's rectangle to a OpenCV-style bounding box
 	# [i.e., (x, y, w, h)], then draw the face bounding box
-	bb = face_utils.rect_to_bb(rect)
+	#(x, y, w, h) = face_utils.rect_to_bb(rect)
+	#cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-import rpy2.robjects as ro
-import rpy2.robjects.numpy2ri
-rpy2.robjects.numpy2ri.activate()
+	# show the face number
+	#cv2.putText(image, "Face #{}".format(i + 1), (x - 10, y - 10),
+		#cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
-nr,nc = shape.shape
-#br,bc = bb.shape
+	# loop over the (x, y)-coordinates for the facial landmarks
+	# and draw them on the image
+	for (x, y) in shape:
+		cv2.circle(image, (x, y), 1, (0, 0, 255), -1)
 
-shapeR = ro.r.matrix(shape, nrow=nr, ncol=nc)
-
-ro.r.assign("shapeR", shapeR)
-#rect = shape[1]
-rect = shapeR[1]
-for rect in shape:
-	print("{} {}".format(*rect))
-#print(ro.r["shapeR"])
-print("{} {} {} {}".format(*bb))
+# show the output image with the face detections + facial landmarks
+print(shape)
+cv2.imwrite('/Users/dalbohn/Desktop/test4.png',image)
+cv2.imshow("Output", image)
+cv2.waitKey(0)

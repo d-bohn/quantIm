@@ -1,41 +1,35 @@
-#' Pads an image to a certain width and height
-#'
-#' @param image
-#' @param width
-#' @param height
-#' @param background
-#'
-#' @return
-#' @export
-#'
-#' @examples
-pad_image <- function(image,width,height,background=NULL,out=NULL){
+pad_image <- function(image,width,height,background,out){
 
   if(exists('db')==TRUE){
     ## START DEBUG NOT RUN
-    image <- here('images2/gleamed','004_o_m_f_a_crop_gleamed.png')
+    image <- '/Users/dalbohn/Desktop/male.jpg'
     width <- 512
     height <- 512
-    background <- "'#7F7F7F'"
+    # background <- "#7F7F7F"
+    condaenv <- 'quantIm'
     ## END DEBUG NOT RUN ##
   }
 
-  if (is.null(system('convert -version'))==TRUE){
+  if (!hasArg(background)==TRUE) background <- "#7F7F7F"
 
-    message('Please install magick for your system.')
+  if (!hasArg(out)) out <- paste0(gsub('.png','',image),'_padded.png')
+
+  raw <- magick::image_read(image)
+  meta <- magick::image_info(raw)
+  desired_dims <- paste(width,height,sep='x')
+
+  if( width > meta$width & height > meta$height ){
+    pad_width <- round((width - meta$width)/2,0)
+    pad_height <- round((height - meta$height)/2,0)
+    dims <- paste(pad_width,pad_height,sep='x')
+
+    padded <- magick::image_border(raw, background, dims)
+    padded <- magick::image_crop(padded, desired_dims)
+    magick::image_write(padded, path = out)
 
   } else{
-    if (is.null(background)==TRUE) background <- "'#7F7F7F'"
+    stop('Supplied width and height are not compatible with image')
+    stop("Desired dimensions are likely too small to pad with")
+  }
 
-    dims <- paste(width,height,sep = 'x')
-    if (is.null(out)==TRUE) out <- paste0(gsub('.png','',image),'_padded.png')
-    command1 <- paste('convert',image,'-gravity center -background',background,'-extent',dims,out, sep=' ')
-    #command1 <- 'convert 004_o_m_f_a_crop_gleamed.png -gravity center -background white -extent 512x512 result.png'
-    tryCatch(system(command1,intern=TRUE),
-             error=function(e){
-               message('Error. Please check that all options are correct by reviewing the documentation.')
-               message('Also, make sure you supply the full path for the image!')
-             })
-
-    }
 }

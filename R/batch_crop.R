@@ -17,7 +17,8 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom here here
 
-batch_crop <- function(file_list, path, save_string, dist, wh, points, gleam = FALSE, pad = FALSE){
+batch_crop <- function(file_list, path, save_string, dist, wh, points,
+                       gleam = FALSE, pad = FALSE, ...){
 
   if(exists('db')==TRUE){
     ### START DEBUGGING NOT RUN ##
@@ -28,11 +29,15 @@ batch_crop <- function(file_list, path, save_string, dist, wh, points, gleam = F
     dist = '116'
     wh='512'
     gleam=TRUE; pad=TRUE
+    condenv='quantIm'
     ### END DEBUGGING NOT RUN ##
   }
 
-  wd <- getwd()
-  setwd(path)
+  # wd <- getwd()
+  # setwd(path)
+
+  if (hasArg(condaenv)) reticulate::use_python(quantIm::find_python(condaenv), required = TRUE)
+  if (hasArg(python)) reticulate::use_python(python)
 
   for (i in 1:length(file_list)){
 

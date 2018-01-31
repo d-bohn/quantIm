@@ -11,7 +11,6 @@
 #'
 #' @return Returns number of faces by 4 dimension dataframe specifying the bounding box
 #' coordinates of each face and the width and height of each bonding box
-#' @export
 #'
 #' @examples
 #' im <- system.file('extdata', 'faces.jpg', package = 'quantIm')

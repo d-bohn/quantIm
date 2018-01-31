@@ -6,7 +6,6 @@
 #' @param python
 #'
 #' @return
-#' @export
 #'
 #' @examples
 python_of <- function(reference, target, output, save, python=NULL){

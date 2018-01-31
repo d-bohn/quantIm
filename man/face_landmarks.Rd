@@ -4,13 +4,12 @@
 \alias{face_landmarks}
 \title{Detect Face Landmarks and Bounding Box}
 \usage{
-face_landmarks(python_location = "/usr/local/bin/python2", image)
+face_landmarks(image, python = NULL, condaenv = NULL)
 }
 \arguments{
-\item{python_location}{The location of your python install. Defaults to
-default install location for MacOS (e.g., \code{'/usr/local/bin/python'}).}
-
 \item{image}{A string specifying the input image to detect face(s) in.}
+
+\item{python}{}
 }
 \value{
 Returns a list which contains dlib's 68 facial landmarks
@@ -40,9 +39,8 @@ packages must be installed and up to date:
 }
 }
 \examples{
-python_location='/usr/local/bin/python'
 image = system.file("extdata", "defiant2.jpg", package = "quantIm")
-face_landmarks(python_location = python_location, image=image)
+face_landmarks(image=image, python=NULL)
 ----
 }
 \seealso{

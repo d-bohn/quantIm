@@ -4,7 +4,7 @@
 \alias{pad_image}
 \title{Pads an image to a certain width and height}
 \usage{
-pad_image(image, width, height, background = NULL, out = NULL)
+pad_image(image, width, height, background, out)
 }
 \arguments{
 \item{background}{}

@@ -61,8 +61,8 @@ distance_metrics <- function(target, reference, save_id = NULL, to_file = TRUE, 
     ### END DEBUGGING NOT RUN
   }
 
-  quantIm::find_python(python)
-
+  py_loc <- reticulate::use_python(quantIm::find_python(python), required = TRUE)
+  invisible(reticulate::py_discover_config(required_module = 'cv2'))
 
   # Read them images, gurl
   if (is.null(save_id)==TRUE){
@@ -82,12 +82,18 @@ distance_metrics <- function(target, reference, save_id = NULL, to_file = TRUE, 
   np <- reticulate::import('numpy')
   scipy.euc <- reticulate::import('scipy.spatial.distance')
   # fastdtw <- reticulate::import('fastdtw')
-  # cv <- reticulate::import('cv2')
+  cv <- reticulate::import('cv2')
 
   nrmse <- ski$compare_nrmse(target@.Data,reference@.Data)
   psnr <- ski$compare_psnr(target@.Data,reference@.Data)
   ssim <- ski$compare_ssim(target@.Data,reference@.Data)
-  #emd <- cv$CalcEMD2(target@.Data,reference@.Data)
+
+  # target_py <- reticulate::np_array(target@.Data, dtype = 'float32')
+  # hw <- target_py$shape
+  # cv$CreateMat(hw, cv$CV_32FC3)
+  # vis2 = cv$cvtColor(target_py, cv$COLOR_GRAY2BGR)
+  # reference_py <- reticulate::np_array(reference@.Data)
+  # emd <- cv$EMD(target_py,reference_py, distType = cv$DIST_L1)
 
   ## Borrow from fMRI
   sim_reg <- RNiftyReg::similarity(target,reference)

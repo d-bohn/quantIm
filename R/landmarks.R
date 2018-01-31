@@ -25,9 +25,8 @@
 #'    \item{\code{sudo apt-get install libopencv-dev python-opencv}}
 #'}
 #'
-#' @param python_location The location of your python install. Defaults to
-#'default install location for MacOS (e.g., \code{'/usr/local/bin/python'}).
 #' @param image A string specifying the input image to detect face(s) in.
+#' @param python
 #'
 #' @return Returns a list which contains dlib's 68 facial landmarks
 #' as well as the bounding box that the face in the image exists.
@@ -40,14 +39,21 @@
 #' @export
 #'
 #' @examples
-#' python_location='/usr/local/bin/python'
 #' image = system.file("extdata", "defiant2.jpg", package = "quantIm")
-#' face_landmarks(python_location = python_location, image=image)
+#' face_landmarks(image=image, python=NULL)
 #'----
 #' @importFrom stringr str_split
 #' @importFrom magrittr "%>%"
 #'
-face_landmarks <- function(python_location='/usr/local/bin/python2', image){
+face_landmarks <- function(image, python = NULL, condaenv = NULL){
+
+  # base <- '/Users/dalbohn/Documents/R_packages/quantIm/inst/extdata'
+  # file <- "nm0000100_rm46373120_1955-1-6_2003.jpg"
+  # image <- file.path(base,file)
+  # condaenv = 'quantIm'
+
+  python_location <- reticulate::use_python(quantIm::find_python(python,condaenv), required = TRUE)
+  #invisible(reticulate::py_discover_config(required_module = 'cv2'))
 
   ## Try to get try to get the script form the inst/python folder
   script <- system.file("python", "facial_landmarks.py", package = "quantIm")
@@ -82,14 +88,14 @@ face_landmarks <- function(python_location='/usr/local/bin/python2', image){
     #points$face <- paste0('face_',seq(1,nrow(points),1))
     points$image <- image
 
-    bb <- bb  %>% data.frame(do.call(rbind, stringr::str_split(., '\\s+')))
+    bb <- bb %>% data.frame(do.call(rbind, stringr::str_split(., '\\s+')))
     names(bb) <- c('face','x','y','width','height')
     bb$image <- image
     bb$face <- paste0('face_',seq(1,nrow(bb),1))
 
     #meta <- dim(EBImage::readImage(image))
 
-    return(list(face_landmarks = points,bounding_box = bb))
+    return(list(face_landmarks = points, bounding_box = bb))
   } else {
     points <- data.frame('Image'=image)
     return(list(points))
