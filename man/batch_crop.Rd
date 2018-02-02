@@ -10,6 +10,9 @@ batch_crop(file_list, path, save_string, dist, wh, points, gleam = FALSE,
 \arguments{
 \item{pad}{}
 }
+\value{
+
+}
 \description{
 Crop Batches of Images from a Folder
 }

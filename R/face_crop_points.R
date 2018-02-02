@@ -1,4 +1,4 @@
-#' Crop image around set of points
+#' Crop a face and rescale
 #'
 #' @aliases Daniel N. Albohn
 #'
@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @examples
-face_crop_points <- function(coords=NULL, image, points = 'default', savename = NULL,
+face_crop_points <- function(coords, image, points = 'default', savename,
                              eye_dist = 125, rescale = TRUE, wh = 512, ...){
 
   on.exit(raster::removeTmpFiles(h=2))
@@ -34,7 +34,7 @@ face_crop_points <- function(coords=NULL, image, points = 'default', savename = 
     ### END DEBUGGING NOT RUN
   }
 
-  if (is.null(coords)==TRUE){
+  if (hasArg(coords)){
     if(hasArg(python)){
       coords <- face_landmarks(image=image, python = python)$face_landmarks
     } else if(hasArg(condaenv)){
@@ -106,7 +106,7 @@ face_crop_points <- function(coords=NULL, image, points = 'default', savename = 
     img <- magick::image_scale(im, paste0(percent,'%'))
     # magick::image_browse(img)
 
-    if (is.null(savename)==TRUE) {
+    if (hasArg(savename)) {
       image_sans <- tools::file_path_sans_ext(image)
       savename <- paste0(image_sans,'_crop_scale.png')
     }
@@ -128,7 +128,7 @@ face_crop_points <- function(coords=NULL, image, points = 'default', savename = 
 
   } else {
 
-    if (is.null(savename)==TRUE) {
+    if (!hasArg(savename)) {
       image_sans <- tools::file_path_sans_ext(image)
       savename <- paste0(image_sans,'_crop.png')
     }

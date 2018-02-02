@@ -3,7 +3,6 @@
 #' @param x A matrix to rotate.
 #'
 #' @return
-#' @export
 #'
 #' @examples
 rotate <- function(x){

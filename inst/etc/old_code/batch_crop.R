@@ -8,7 +8,6 @@
 #' @param pad
 #'
 #' @return
-#' @export
 #'
 #' @examples
 #'
