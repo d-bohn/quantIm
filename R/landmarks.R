@@ -52,7 +52,7 @@ face_landmarks <- function(image, python = NULL, condaenv = NULL){
   # image <- file.path(base,file)
   # condaenv = 'quantIm'
 
-  python_location <- reticulate::use_python(quantIm::find_python(python,condaenv), required = TRUE)
+  python_location <- quantIm::find_python(condaenv = 'quantIm')
   #invisible(reticulate::py_discover_config(required_module = 'cv2'))
 
   ## Try to get try to get the script form the inst/python folder

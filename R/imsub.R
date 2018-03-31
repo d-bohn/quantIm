@@ -2,9 +2,6 @@
 #'
 #' @param image1
 #' @param image2
-#' @param folder1
-#' @param folder2
-#' @param path
 #' @param resize
 #' @param write.data
 #' @param sub
@@ -22,24 +19,12 @@
 #'
 #' @examples
 
-im_sub <- function(image1, image2, folder1=NULL, folder2=NULL, path=NULL,
-                   resize = FALSE, write.data = TRUE, sub='default',
-                   blur=NULL){
+im_sub <- function(image1, image2, resize = FALSE, write.data = TRUE, sub='default',
+                   blur = 0.3){
 
-  if(is.null(path)){
-    path <- here::here()
-  }
-  # library(dplyr)
-  # wd <- getwd()
-  # setwd(path)
-
-  if(is.null(folder1)){
-    im1 <- EBImage::readImage(file.path(path, image1))
-    im2 <- EBImage::readImage(file.path(path, image2))
-  } else{
-    im1 <- EBImage::readImage(file.path(folder1,image1))
-    im2 <- EBImage::readImage(file.path(folder2,image2))
-  }
+  im1 <- EBImage::readImage(image1)
+  im2 <- EBImage::readImage(image2)
+  path <- dirname(image1)
 
   if(!is.null(blur)){
     im1_blur <- spatstat::blur(spatstat::as.im(im1@.Data), blur)
@@ -51,30 +36,30 @@ im_sub <- function(image1, image2, folder1=NULL, folder2=NULL, path=NULL,
 
   out <- im1 - im2
 
-  if (sub == 'default'){
-    file1_sans <- tools::file_path_sans_ext(image1)
-    file2_sans <- tools::file_path_sans_ext(image2)
+  if (sub == 'default') {
+    file1_sans <- basename(image1)
+    file2_sans <- basename(image2)
     sub <- paste0(file1_sans,'-',file2_sans)
-  } else{
-    try({
+  } else {
+    try( {
       sub <- readr::parse_number(image1)
-      if(is.na(sub)==TRUE){
+      if(is.na(sub)==TRUE) {
         class(sub) <- 'try-error'
       }
     })
 
-    if (class(sub) == 'try-error'){
+    if (class(sub) == 'try-error') {
       file1_sans <- tools::file_path_sans_ext(image1)
       file2_sans <- tools::file_path_sans_ext(image2)
       sub <- paste0(file1_sans,'-',file2_sans)
     }
   }
 
-  if(!(dir.exists((file.path(path, 'subtracted'))))){
+  if(!(dir.exists((file.path(path, 'subtracted'))))) {
     dir.create(file.path(path, 'subtracted'))
   }
 
-  if(write.data == TRUE){
+  if(write.data == TRUE) {
     df <- as.data.frame(out)
 
     ## For appending:
@@ -98,6 +83,4 @@ im_sub <- function(image1, image2, folder1=NULL, folder2=NULL, path=NULL,
 
   #(imager::imshift(pt2)-pre2) %>% plot(frame=2,main="Difference betw. frames 2 and 1")
   #setwd(wd)
-
-  rm(list = ls())
 }

@@ -61,7 +61,7 @@ distance_metrics <- function(target, reference, save_id = NULL, to_file = TRUE, 
     ### END DEBUGGING NOT RUN
   }
 
-  py_loc <- reticulate::use_python(quantIm::find_python(python), required = TRUE)
+  py_loc <- find_python(condenv = 'quantIm')
   invisible(reticulate::py_discover_config(required_module = 'cv2'))
 
   # Read them images, gurl

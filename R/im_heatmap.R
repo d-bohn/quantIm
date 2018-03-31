@@ -21,47 +21,53 @@
 #'
 #' @examples
 
-im_heatmap <- function(path=NULL, name, file = NULL, base_image,
-                       mask=NULL, thresh=1.96){
+im_heatmap <- function(name, file, base_image, mask, thresh = 1.96){
 
-  if(is.null(path)){
-    path <- here::here()
-  }
-  if (is.null(file)){
-    file = paste0(name,"_average_t_values.csv")
-  }
+  if(hasArg(file)){
+    path <- dirname(file)
+  } else if (hasArg(name)){
+    file <- paste0(name,"_average_t_values.csv")
+  } else stop('Please supply valid file or name')
 
-  ext <- tools::file_ext(file.path(path,base_image))
-  if((ext == 'png') == TRUE){
-    image <- png::readPNG(file.path(path,base_image))
-    img <- grid::rasterGrob(image, interpolate=TRUE)
-  } else if ((ext=='jpg')==TRUE){
-    image <- jpeg::readJPEG(file.path(path,base_image))
-    img <- grid::rasterGrob(image, interpolate=TRUE)
+  if (hasArg(base_image)) ext <- tools::file_ext(base_image)
+
+  if((hasArg(base_image) && ext == 'png') == TRUE) {
+    image <- png::readPNG(base_image)
+    img <- grid::rasterGrob(image, interpolate = TRUE)
+  } else if ((hasArg(base_image) && ext=='jpg') == TRUE) {
+    image <- jpeg::readJPEG(base_image)
+    img <- grid::rasterGrob(image, interpolate = TRUE)
   } else {
     message ('Please supply either a .jpg or .png picture file.')
     break
   }
 
-  mext <- tools::file_ext(mask)
-  if (!is.null(mask)){
+  if(hasArg(mask)) mext <- tools::file_ext(mask)
+
+  if (hasArg(mask)){
     if((mext == 'png') == TRUE){
-      mask_im <- EBImage::readImage(file.path(path,mask))
+      mask_im <- EBImage::readImage(mask)
     } else if ((mext=='jpg')==TRUE){
-      mask_im <- EBImage::readImage(file.path(path,mask))
+      mask_im <- EBImage::readImage(mask)
     } else {
       message ('Please supply either a .jpg or .png mask file.')
       break
     }
   }
 
-  df <- data.table::fread(file.path(path,file))
+  df <- data.table::fread(file)
   mat <- data.matrix(df)
-  mat2 <- mat*mask_im
 
-  rotate <- function(x) t(apply(x, 2, rev))
-  mat3 <- rotate(rotate(mat2))
-  # mat3 <- mat2
+  if (hasArg(mask)) {
+    mat2 <- mat*mask_im
+  } else {
+    mat2 <- mat
+  }
+
+
+  # rotate <- function(x) t(apply(x, 2, rev))
+  # mat3 <- rotate(rotate(mat2))
+  mat3 <- mat2
 
 
   mat_rotate <- RSAGA::grid.to.xyz(mat3)
@@ -78,6 +84,7 @@ im_heatmap <- function(path=NULL, name, file = NULL, base_image,
     #                   -Inf, Inf, -Inf, Inf) +
     annotation_custom(g, xmin=min(data2$y), xmax=max(data2$y), ymin=min(data2$x), ymax=max(data2$x)) +
     #annotation_custom(img, xmin=0, xmax=236, ymin=0, ymax=236) +
+    xlim(0,NA) + ylim(0,NA) +
     geom_tile(show.legend = FALSE, inherit.aes = FALSE, na.rm = TRUE,
               aes(x = y, y = x, fill = z2, alpha = 1/20)) +
     # geom_raster(show.legend = FALSE, inherit.aes = FALSE, na.rm = TRUE,
@@ -96,7 +103,7 @@ im_heatmap <- function(path=NULL, name, file = NULL, base_image,
       axis.ticks.y=element_blank(),
       plot.background = element_rect(fill = "transparent",colour = NA)
     )
-  #plot
+  # plot
 
   height = dim(image)[1]*2 + ((dim(image)[1]*2)-((dim(image)[1]*2)*.95))
   width = dim(image)[2]*2 + ((dim(image)[2]*2)-((dim(image)[2]*2)*.90))
@@ -107,6 +114,6 @@ im_heatmap <- function(path=NULL, name, file = NULL, base_image,
   dev.off()
 
   # setwd(wd)
-  rm(list = ls())
+  # rm(list = ls())
 
 }
