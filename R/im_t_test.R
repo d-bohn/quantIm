@@ -1,10 +1,14 @@
 #' Compute t-test on multiple images
 #'
-#' @param path
-#' @param pattern1
-#' @param name
+#' @param path File path to folder with subtracted image files and values.
+#' @param pattern1 Pattern that the subtracted files were saved in. Defaults to '.csv'
+#' @param name Name that the t-values file should be saved as.
+#' @param write Should the file be saved (\code{TRUE}), or returned as a vector (\code{FALSE}).
+#' Defaults to \code{TRUE}.
 #'
 #' @return
+#'
+#'
 #' @export
 #' @importFrom abind abind
 #' @importFrom here here
@@ -12,12 +16,12 @@
 #'
 #' @examples
 
-im_t_test <- function(path = NULL, pattern1 = '*.csv', name, write = TRUE){
+im_t_test <- function(path, pattern1 = '*.csv', name, write = TRUE){
   library(dplyr)
   # wd <- getwd()
   # setwd(path)
 
-  if(is.null(path)){
+  if(!hasArg(path)){
     stop('Please supply folder path...')
   }
 

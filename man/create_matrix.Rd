@@ -7,7 +7,7 @@
 create_matrix(image, points, ntimes)
 }
 \arguments{
-\item{points}{}
+\item{ntimes}{}
 }
 \description{
 Create a matrix of face points

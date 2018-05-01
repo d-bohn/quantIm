@@ -14,9 +14,9 @@
 #'
 #' The gleam algorithm can be formally stated as:
 #'
-#' \deqn{G = 1/3(R' + G' + B'}s
+#' \deqn{Gleam = 1/3(R' + G' + B')}
 #'
-#' Where R',G', and B' are the gamma-corrected color channels.
+#' Where R', G', and B' are the gamma-corrected color channels.
 #'
 #' @seealso
 #' See \link{http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0029740}
@@ -31,14 +31,22 @@
 #' @return Returns a a two-dimenstional array of gamma-corrected intensity
 #' pixel values equal to the width and height of the original \code{image}.
 #' @export
-
+#'
 #' @examples
-#' image <- system.file('extdata', 'faces.jpg', package = 'quantIm')
+#' image <- system.file('extdata', 'obama.png', package = 'quantIm')
 #' gleam_image <- gleam(image, show=TRUE)
 #' ...
 #' @importFrom EBImage readImage imageData Image display
 #'
 gleam <- function(image, tau=(1/2.2), show=FALSE) {
+  if (show == TRUE){
+    on.exit({
+      plot(0:1,0:1,type="n", ann=FALSE, axes=FALSE)
+      rasterImage(im2,0,0,1,1)
+    }
+    )
+  }
+
   im <- EBImage::readImage(image)
   if(length(dim(im)) == 3){
     red <- (EBImage::imageData(im)[,,1])^tau
@@ -50,8 +58,6 @@ gleam <- function(image, tau=(1/2.2), show=FALSE) {
     im2 <- im
     message(image,' does not have 3 channels. Writting original file to disk.')
   }
-  if (show==TRUE){
-    EBImage::display(im2)
-  }
+
   return(as.array(im2))
 }

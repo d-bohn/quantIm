@@ -3,6 +3,8 @@
 #' @return
 #' @export
 #'
+#' @importFrom reticulate conda_list conda_binary conda_create conda_install
+#'
 #' @examples
 
 install_quantIm <- function(){
@@ -13,16 +15,23 @@ install_quantIm <- function(){
   paks2 <- c('git+https://github.com/garydoranjr/pyemd.git#egg=pyemd',
              'git+https://github.com/pathak22/pyflow.git#egg=pyflow')
 
-  condaInst <- conda_binary()
+  condaInst <- reticulate::conda_binary()
 
   if (length(condaInst) != 0){
-    condaList <- conda_list()
+    condaList <- reticulate::conda_list()
     if(!('quantIm' %in% condaList$name)){
 
-      conda_create(envname = 'quantIm', packages = paks,
-                    conda = condaInst)
+      reticulate::conda_create(envname = 'quantIm',
+                               packages = paks,
+                               conda = condaInst)
 
-      conda_install('quantIm', paks2, pip=TRUE)
+      reticulate::conda_install('quantIm',
+                                'opencv',
+                                forge = TRUE)
+
+      reticulate::conda_install('quantIm',
+                                paks2,
+                                pip=TRUE)
 
     }
 

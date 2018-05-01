@@ -36,7 +36,6 @@
 #' OpenCV2 \link{http://opencv.org/platforms/}
 #' imagemagick and magick \link{https://ropensci.org/blog/2016/08/23/z-magick-release}
 #'
-#' @export
 #'
 #' @examples
 #' image = system.file("extdata", "defiant2.jpg", package = "quantIm")

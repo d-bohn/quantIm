@@ -30,12 +30,12 @@ and then compute the gray values from the gleam algorithm.
 
 The gleam algorithm can be formally stated as:
 
-\deqn{G = 1/3(R' + G' + B'}s
+\deqn{Gleam = 1/3(R' + G' + B')}
 
-Where R',G', and B' are the gamma-corrected color channels.
+Where R', G', and B' are the gamma-corrected color channels.
 }
 \examples{
-image <- system.file('extdata', 'faces.jpg', package = 'quantIm')
+image <- system.file('extdata', 'obama.png', package = 'quantIm')
 gleam_image <- gleam(image, show=TRUE)
 ...
 }

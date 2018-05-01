@@ -4,21 +4,30 @@
 \alias{im_heatmap}
 \title{Create heatmap image from t-values}
 \usage{
-im_heatmap(path = NULL, name, file = NULL, base_image, mask = NULL,
-  thresh = 1.96)
+im_heatmap(tz_file, base_image, mask, thresh = 1.96)
 }
 \arguments{
-\item{path}{Absolute path to t-values file from working directory}
-
-\item{file}{Name of actual image}
+\item{tz_file}{Path to file of t-values.}
 
 \item{base_image}{Relative path to base image file (in \code{.jpg} or \code{.png} format).}
 
 \item{mask}{Relative path to mask image file (in \code{.jpg} or \code{.png} format). Defaults
 to \code{NULL}.}
 
-\item{thresh}{}
+\item{thresh}{The cuttoff score for significance. Defaults to p = .05, or 1.96.}
+
+\item{save}{Should the plot be saved? Defaults to \code{FALSE}}
+}
+\value{
+Returns a \code{ggplot2} object that can be further manipulated using
+\code{ggplot2} functions, or saved.
 }
 \description{
 Create heatmap image from t-values
+}
+\details{
+If saving graph, make sure to save the image with the exact width and
+height of the original images, else the heatmap values will not be placed correctly.
+Specifying that the plot should be saved automatically extracts the width and height
+of the original image.
 }

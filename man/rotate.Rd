@@ -7,10 +7,7 @@
 rotate(x)
 }
 \arguments{
-\item{x}{A matrix to rotate.}
-}
-\value{
-
+\item{x}{}
 }
 \description{
 Rotate a matrix 90 degrees
