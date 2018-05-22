@@ -35,6 +35,43 @@ get_landmarks <- function(image, convert = TRUE){
 
 }
 
+#' Affine transform face image points
+#'
+#' @param image1 Image to reference in transformation.
+#' @param image2 Image to be transformed.
+#' @param convert Convert output to be R compatible?
+#'
+#' @return Affine transformation matrix.
+#'
+#' @importFrom reticulate import source_python
+#' @export
+#'
+#' @examples
+#'
+
+transform_points_py <- function(image1, image2, convert = TRUE){
+
+  # Get points ----
+  pts1 <- get_landmarks(image1, convert = FALSE)
+  pts2 <- get_landmarks(image2, convert = FALSE)
+
+  # Get transformation matrix ----
+  if (convert == TRUE){
+    py_file <- system.file("python", "transform_points.py", package = "quantIm")
+    reticulate::source_python(py_file, convert = TRUE)
+
+    matrix <- transformation_points(points1 = pts1, points2 = pts2)
+    return(matrix)
+  }
+  if (convert == FALSE){
+    py_file <- system.file("python", "transform_points.py", package = "quantIm")
+    reticulate::source_python(py_file, convert = FALSE)
+
+    matrix <- transformation_points(points1 = pts1, points2 = pts2)
+    return(matrix)
+  }
+}
+
 #' Warp (affine transform) an image
 #'
 #' @param image1 Path to image to warp.
@@ -139,6 +176,7 @@ color_correction <- function(image1, image2, blur = 0.6){
 #' @return
 #'
 #' @importFrom EBImage readImage
+#' @export
 #'
 #' @examples
 #'

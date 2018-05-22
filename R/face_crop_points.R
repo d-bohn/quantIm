@@ -18,28 +18,8 @@ face_crop_points <- function(coords, image, points = 'default', savename,
 
   on.exit(raster::removeTmpFiles(h=2))
 
-  if(exists('db')==TRUE){
-    #### FOR DEGUGGING NOT RUN
-    base <- '/Users/dalbohn/Documents/R_packages/quantIm/inst/extdata'
-    file <- 'defiant2.jpg'
-    # base <- '~/Desktop'
-    # file <- "test3.png"
-    image <- file.path(base,file)
-    condaenv = 'quantIm'
-    coords <- quantIm::face_landmarks(image = image, condaenv = condaenv)$face_landmarks
-    eye_dist = 125
-    wh = 512
-    points = 'default'
-    savename = NULL
-    ### END DEBUGGING NOT RUN
-  }
-
-  if (hasArg(coords)){
-    if(hasArg(python)){
-      coords <- face_landmarks(image=image, python = python)$face_landmarks
-    } else if(hasArg(condaenv)){
-      coords <- face_landmarks(image=image, condaenv = condaenv)$face_landmarks
-    } else message('Cannot configure python to run, check you have supplied proper arguments.')
+  if (!hasArg(coords)) {
+    coords <- quantIm::get_landmarks(image)
   }
 
   if (points == 'default'){
@@ -93,6 +73,7 @@ face_crop_points <- function(coords, image, points = 'default', savename,
   centery <- left_pupil[[2]]-(256/scale)
 
   ## Now crop!
+  image_sans <- tools::file_path_sans_ext(image)
   img <- magick::image_read(image)
   # wh2 <- paste(wh_scale,wh_scale,sep = 'x')
   w_h_x_y <- magick::geometry_area(wh_scale, wh_scale, centerx, centery)
@@ -107,7 +88,6 @@ face_crop_points <- function(coords, image, points = 'default', savename,
     # magick::image_browse(img)
 
     if (hasArg(savename)) {
-      image_sans <- tools::file_path_sans_ext(image)
       savename <- paste0(image_sans,'_crop_scale.png')
     }
 
@@ -120,16 +100,14 @@ face_crop_points <- function(coords, image, points = 'default', savename,
                                                 image type to be written.')
     }
 
-    coords_new <- quantIm::face_landmarks(image = savename, condaenv = condaenv)$face_landmarks
+    coords_new <- quantIm:::get_landmarks(image = savename)
 
     coords <- dplyr::bind_cols(coords, coords_new)
 
     return(coords)
 
   } else {
-
     if (!hasArg(savename)) {
-      image_sans <- tools::file_path_sans_ext(image)
       savename <- paste0(image_sans,'_crop.png')
     }
 

@@ -46,16 +46,16 @@ z_vals <- im_z_test(path = folder_path, write = write, pattern1 = pattern1, name
 # End debug im_t_test
 
 # ---- Start debug im_heatmap ----
-tz_file = '/Volumes/UNTITLED/emotion_residue/MI_M/MI_M_Pics/test_imgs/subtracted/post-pre_average_z_values.csv'
-base_image = '/Volumes/UNTITLED/emotion_residue/PrPt_Exp/average.png'
-mask = '/Volumes/UNTITLED/emotion_residue/PrPt_Exp/average_mask.png'
+base <- '/Users/dalbohn/Documents/zblack_hole/emtion_residue_images/prptex/anger/'
+gleam_folder <- file.path(base, 'gleamed')
 
 p1 <- im_heatmap(
-      tz_file = tz_file,
-      base_image = '/Volumes/UNTITLED/emotion_residue/PrPt_Exp/average.png',
-      mask = '/Volumes/UNTITLED/emotion_residue/PrPt_Exp/average_mask.png',
-      thresh = 3
-      )
+   tz_file = file.path(gleam_folder,'subtracted/post-pre_average_z_values.csv'),
+   base_image = file.path(base,'prptex_anger_average.png'),
+   mask = file.path(base,'prptex_anger_mask.png'),
+   thresh = 3.090,
+   absval = TRUE
+)
 p1$heatmap
 
 # End Debug im_heatmap

@@ -51,17 +51,6 @@
 #'
 distance_metrics <- function(target, reference, save_id = NULL, to_file = TRUE, python = NULL){
 
-  if(exists('db')==TRUE){
-    #### FOR DEGUGGING NOT RUN
-    save_id <- '^.*extdata/|*.png*$'
-    target = here::here('inst/extdata/subject_nr_1002.png')
-    reference = here::here('inst/extdata/include_total.png')
-    to_file = TRUE
-    python = NULL
-    ### END DEBUGGING NOT RUN
-  }
-
-  py_loc <- find_python(condenv = 'quantIm')
   invisible(reticulate::py_discover_config(required_module = 'cv2'))
 
   # Read them images, gurl

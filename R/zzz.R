@@ -1,7 +1,5 @@
 cv <- NULL
 
-#' @importFrom reticulate conda_list import conda_binary
-
 .onLoad <- function(libname, pkgname){
   cv <<- reticulate::import('cv2', delay_load = TRUE)
 
@@ -18,3 +16,26 @@ cv <- NULL
   }
 
 }
+
+# x <- reticulate::py_config()
+#
+# if (utils::compareVersion(x$version, "3.5") < 0) {
+#   stop(
+#     paste0(
+#       c(
+#         "Python 3.5+ is required. If this is installed please set RETICULATE_PYTHON ",
+#         "to the path to the Python 3 binary on your system and try re-installing/",
+#         "re-loading the package."
+#       ),
+#       collapse = ""
+#     )
+#   )
+# }
+#
+# dsstore <- NULL
+# os <- NULL
+#
+# .onLoad <- function(libname, pkgname) {
+#   os <<- reticulate::import("cv2", delay_load = TRUE)
+# }
+
