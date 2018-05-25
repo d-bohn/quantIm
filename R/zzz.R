@@ -1,20 +1,14 @@
 cv <- NULL
 
-.onLoad <- function(libname, pkgname){
-  cv <<- reticulate::import('cv2', delay_load = TRUE)
-
-  condaInst <- reticulate::conda_binary()
-
-  if (length(condaInst) != 0){
-    condaList <- reticulate::conda_list()
-    if (('quantIm' %in% condaList$name)) {
-      quantIm:::find_python(condaenv = 'quantIm')
-    }
-  } else {
-    message('Please install dependencies with')
-    message('"install_quantIm()" function before using.')
+.onLoad <- function(libname, pkgname) {
+  if (is_quantIm()) {
+    find_quantIm()
+    cv <<- reticulate::import('cv2', delay_load = list(
+      environment = "quantIm"
+      ))
+  } else if (!is_quantIm()) {
+    quantIm_not_found_message()
   }
-
 }
 
 # x <- reticulate::py_config()
@@ -33,9 +27,9 @@ cv <- NULL
 # }
 #
 # dsstore <- NULL
-# os <- NULL
+# cv <- NULL
 #
 # .onLoad <- function(libname, pkgname) {
-#   os <<- reticulate::import("cv2", delay_load = TRUE)
+#   cv <<- reticulate::import("cv2", delay_load = TRUE)
 # }
 

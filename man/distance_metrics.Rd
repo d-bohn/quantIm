@@ -4,8 +4,7 @@
 \alias{distance_metrics}
 \title{Obtain Various Distance Metrics Between Two Images}
 \usage{
-distance_metrics(target, reference, save_id = NULL, to_file = TRUE,
-  python = NULL)
+distance_metrics(target, reference, save_id = NULL, to_file = TRUE)
 }
 \arguments{
 \item{target}{Path to an image.}
@@ -25,7 +24,4 @@ which distance measures are includes.
 }
 \description{
 Obtain Various Distance Metrics Between Two Images
-}
-\examples{
-
 }

@@ -10,36 +10,8 @@
 #' @return Returns dataframe with various distance metrics. See details for
 #' which distance measures are includes.
 #'
-#' @details The following distance metrics are computed:
-#' \itemize{
-#' \item{nrmse= Normalized root mean squred error from python \code{skimage.measure}
-#' module (must be installed prior to use)},
-#' \item{psnr = Peak Signal-to-Noise ration from python \code{skimage.measure} module
-#' (must be installed priot to use)},
-#' \item{ssim = Structural similarity index from python \code{skimage.measure} module
-#' (must be installed prior to use)},
-#' \item{sim_reg = Similarity metric from \code{\link{RNiftyReg::similarity}}},
-#' \item{dtw = Dynamic Time Warping distance from \code{\link{dtwclust::dtw_basic}}},
-#' \item{dtw2 = Two-dimensional dynamic time warp from \code{link{dtw::dtw}}},
-#' \link{https://pypi.python.org/pypi/fastdtw} (must be installed prior to use)},
-#' \item{fourier = Fast Fourier Transform distance from \code{\link{TSdist::FourierDistance}}},
-#' \item{emd = Earth Mover's Distance computed from
-#' \link{https://github.com/garydoranjr/pyemd} (must be installed prior to use)},
-#' \item{shape_extraction = Time-series shape extraction based on optimal
-#' alignments \code{\link{dtwclus::shape_extraction}}},
-#' \item{dtwlb = Dynamic Time Warping distance from \code{\link{dtwclust::dtw_lb}}}.
-#' }
-
-#'
-#'All of the required python packages used for this function can be installed by running the
-#'setup function \code{quantIm::initialize_quantIm()}. Note that this setup function only works for
-#'UNIX based operating systems (not Windows).
-#'
 #' @export
 #'
-#' @examples
-#'
-#' @importFrom magrittr "%>%"
 #' @importFrom tibble tribble
 #' @import dtwclust
 #' @importFrom dtwclust dtw_lb
@@ -49,9 +21,8 @@
 #' @importFrom EBImage readImage
 #' @importFrom tools file_path_sans_ext
 #'
-distance_metrics <- function(target, reference, save_id = NULL, to_file = TRUE, python = NULL){
-
-  invisible(reticulate::py_discover_config(required_module = 'cv2'))
+#' @examples
+distance_metrics <- function(target, reference, save_id = NULL, to_file = TRUE){
 
   # Read them images, gurl
   if (is.null(save_id)==TRUE){
@@ -109,8 +80,8 @@ distance_metrics <- function(target, reference, save_id = NULL, to_file = TRUE, 
     ## Values
     t_name, r_name, nrmse, psnr, ssim, sim_reg, dtw, dtwN)
 
-  if (to_file==TRUE){
-    if(!file.exists(here::here('distance_metrics.csv'))){
+  if (to_file==TRUE) {
+    if(!file.exists(here::here('distance_metrics.csv'))) {
       write.table(data, 'distance_metrics.csv', row.names = FALSE, sep = ',')
       message('Distance metrics file create at: ', here::here())
       message(t_name,' written to file')
