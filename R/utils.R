@@ -1,10 +1,25 @@
+#' @export
 # quantIm helper functions ----
+load_quantIm <- function() {
+  if (is_quantIm()) {
+      find_quantIm()
+      cv <<- reticulate::import('cv2', delay_load = list(
+        environment = "quantIm"
+        ), convert = FALSE)
+      dlib <<- reticulate::import('dlib', delay_load = list(
+        environment = "quantIm"
+      ), convert = FALSE)
+    } else if (!is_quantIm()) {
+      quantIm_not_found_message()
+    }
+}
+
 find_quantIm <- function() {
   condaList <- reticulate::conda_list()
   if (('quantIm' %in% condaList$name)) {
     reticulate::use_condaenv('quantIm', required = TRUE)
-    } else {
-      quantIm_not_found_message()
+  } else {
+    quantIm_not_found_message()
   }
 }
 
@@ -82,6 +97,7 @@ resize_points <- function(coords, image, width, height){
   return(coords <- cbind(coords,d))
 }
 
+#' @export
 # Plot face land marks ----
 plot_landmarks <- function(landmarks=NULL, image, save=NULL){
 

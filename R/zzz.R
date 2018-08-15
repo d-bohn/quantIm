@@ -1,15 +1,15 @@
-cv <- NULL
-
-.onLoad <- function(libname, pkgname) {
-  if (is_quantIm()) {
-    find_quantIm()
-    cv <<- reticulate::import('cv2', delay_load = list(
-      environment = "quantIm"
-      ))
-  } else if (!is_quantIm()) {
-    quantIm_not_found_message()
-  }
-}
+# cv <- NULL
+#
+# .onLoad <- function(libname, pkgname) {
+#   if (is_quantIm()) {
+#     find_quantIm()
+#     cv <<- reticulate::import('cv2', delay_load = list(
+#       environment = "quantIm"
+#       ))
+#   } else if (!is_quantIm()) {
+#     quantIm_not_found_message()
+#   }
+# }
 
 # x <- reticulate::py_config()
 #

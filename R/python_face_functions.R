@@ -24,7 +24,12 @@ get_landmarks <- function(image, convert = TRUE){
   if (convert == TRUE){
     reticulate::source_python(py_file)
     x <- get_landmarks(im = img, PREDICTOR_PATH = PREDICTOR_PATH)
-    landmarks <- data.frame(point = seq(1:68), x = x[,1], y = x[,2])
+
+    landmarks <- data.frame(image_base = rep(basename(image),68),
+                            image_path = rep(image, 68),
+                            point = seq(0,67),
+                            x = x[,1],
+                            y = x[,2])
     return(landmarks)
   }
   if (convert == FALSE){

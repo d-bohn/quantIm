@@ -9,11 +9,12 @@
 
 install_quantIm <- function(){
 
-  paks <- c('python=3','imutils', 'numpy', 'scipy', 'matplotlib', 'dlib',' scikit-image',
-            'opencv', 'Pillow', 'boost')
+  paks <- c('python=3', 'numpy', 'scipy', 'matplotlib', 'dlib', 'scikit-image',
+            'Pillow', 'boost', 'Cython', 'gcc')
 
   paks2 <- c('git+https://github.com/garydoranjr/pyemd.git#egg=pyemd',
-             'git+https://github.com/pathak22/pyflow.git#egg=pyflow')
+             'git+https://github.com/pathak22/pyflow.git#egg=pyflow',
+             'imutils')
 
   condaInst <- reticulate::conda_binary()
 
