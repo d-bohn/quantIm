@@ -66,7 +66,7 @@ create_average_template <- function(files) {
   return(average_temp)
 }
 
-#' Tansforms landmarks file to json file
+#' Converts landmarks file to json file
 #'
 #' @param landmarks Landmarks returned from \link{\code{get_landmarks}}
 #' @param write_out If \code{TRUE} (default) write file to disk, else returns landmarks as json.
@@ -109,11 +109,53 @@ landmarks_to_json <- function(landmarks, write_out = TRUE, savename) {
   tem$labels$position$y <- landmarks$y
 
   if (write_out == TRUE) {
-    jsondf <- jsonlite::toJSON(df, dataframe = 'row', raw = 'mongo')
+    jsondf <- jsonlite::toJSON(tem, dataframe = 'row', raw = 'mongo')
     readr::write_lines(jsondf, savename)
   } else if (write_out == FALSE) {
-    jsondf <- jsonlite::toJSON(df, dataframe = 'row', raw = 'mongo')
+    jsondf <- jsonlite::toJSON(tem, dataframe = 'row', raw = 'mongo')
     return(jsondf)
   }
 
+}
+
+#' Converts landmarks to JPsychomorph tem file
+#'
+#' @param landmarks Landmarks returned from \link{\code{get_landmarks}}
+#' @param write_out If \code{TRUE} (default) write file to disk, else returns landmarks as json.
+#' @param savename If supplied the name of the file to write out, else will derive directory from
+#' landmarks file supplied.
+#'
+#' @return \code{.tem} file or data frame
+#' @importFrom readr write_delim
+#' @importFrom tools file_path_sans_ext
+#' @export
+#'
+#' @examples
+#'
+landmarks_to_tem <- function(landmarks, write_out = TRUE, savename) {
+  if (isFALSE(is.data.frame(landmarks)) & isFALSE(is.character(landmarks))) {
+    message("Please supply landmark dataframe or path")
+  } else if (isFALSE(is.data.frame(landmarks)) & isTRUE(is.character(landmarks))) {
+    landmark_file <- landmarks
+    landmarks <- read.csv(landmarks)
+    file <- tools::file_path_sans_ext(as.character(landmarks$image_base[[1]]))
+    if (isFALSE(hasArg(savename))) {
+      savename <- file.path(dirname(landmark_file),paste0(file,'__labels.json'))
+    }
+  } else if (isTRUE(is.data.frame(landmarks))) {
+    landmarks <- landmarks
+    file <- tools::file_path_sans_ext(as.character(landmarks$image_base[[1]]))
+    if (isFALSE(hasArg(savename))) {
+      savename <- file.path(dirname(as.character(landmarks$image_path[[1]])),paste0(file,'__labels.json'))
+    }
+  }
+
+  df <- data.frame(x = landmarks$x, y = landmarks$y)
+  data <- rbind(c(68,NA),df,c(0,NA))
+
+  if (write_out == TRUE) {
+    readr::write_delim(data, savename, delim = ' ', na = '', col_names = FALSE)
+  } else if (write_out == FALSE) {
+    return(data)
+  }
 }

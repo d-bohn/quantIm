@@ -12,7 +12,7 @@
 #' img <- system.file("extdata", "obama.png", package = "quantIm")
 #' get_landmarks(img)
 #'
-get_landmarks <- function(image, convert = TRUE){
+get_landmarks <- function(image, convert = TRUE) {
 
   cv <- reticulate::import('cv2', convert = FALSE)
 
