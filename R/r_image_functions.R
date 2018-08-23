@@ -134,7 +134,7 @@ im_sub <- function(image1, image2, save_image = TRUE,
 #' @param files2
 #' @param save_image
 #' @param write_data
-#' @param blur
+#' @param ... Additional arguments to be passed to \code{im_sub}.
 #'
 #' @return
 #'
@@ -171,15 +171,12 @@ batch_im_sub <- function(files1, files2, save_image,
 #'
 #' @export
 #' @importFrom abind abind
-#' @importFrom here here
+#' @importFrom purrr map reduce
 #' @importFrom data.table fwrite fread
 #'
 #' @examples
 
 im_t_test <- function(path, pattern1 = '*.csv', name, write = TRUE){
-  library(dplyr)
-  # wd <- getwd()
-  # setwd(path)
 
   if(!hasArg(path)){
     stop('Please supply folder path...')
@@ -190,32 +187,8 @@ im_t_test <- function(path, pattern1 = '*.csv', name, write = TRUE){
   list <- purrr::map(files, data.table::fread)
   zz <- purrr::reduce(list, abind::abind, along = 3)
 
-  # setwd(path)
-  # list <- list2env(
-  #   lapply(setNames(files, make.names(gsub("*.csv$", "", files))),
-  #          data.table::fread), envir = .GlobalEnv)
-  # setwd(wd)
-
-  # lst <- Filter(function(x) is(x, "data.frame"), mget(ls()))
-  # lst <- lapply(ls(pattern=pattern2), function(x) get(x))
-  # ar1 <- array(unlist(lst), dim = c(dim(lst[1]), length(lst)))
-  # res2 <-  apply(aperm(ar1, c(3, 1, 2)), c(2,3), FUN = function(x) t.test(x, mu = 0)$p.value)
-  # str(res2)
-
-  # zz <- do.call(abind::abind, c(lst, along = 3))
-
   tt <- apply(zz, 1:2, function (u) t.test(u, mu = 0)$statistic)
 
-  # apply(tt, 1, function(x) lapply(x, identity))
-
-  # z <- matrix(tapply(unlist(lst, use.names = FALSE),
-  #                    rep(gl(prod(dim(lst[[1]])), 1), length(lst)),
-  #                    #FUN = function (u) t.test(u, mu = 0)$p.value),
-  #                    FUN = function (u) t.test(u, mu = 0)$statistic),
-  #             nrow = nrow(lst[[1]]))
-
-  # data <- as.data.frame(z)
-  # rm(list= ls()[!(ls() %in% c('tt','path','name'))])
   data <- as.data.frame(tt)
 
   if (write == TRUE) {
@@ -239,13 +212,13 @@ im_t_test <- function(path, pattern1 = '*.csv', name, write = TRUE){
 #'
 #' @export
 #' @importFrom abind abind
-#' @importFrom here here
+#' @importFrom BSDA z.test
+#' @importFrom purrr map reduce
 #' @importFrom data.table fwrite fread
 #'
 #' @examples
 
 im_z_test <- function(path, data, pattern1 = '*.csv', name, write = TRUE){
-  library(dplyr)
 
   if (!hasArg(path) && length(dim(data)) != 3) {
     stop('Please supply folder path,')
@@ -284,7 +257,7 @@ im_z_test <- function(path, data, pattern1 = '*.csv', name, write = TRUE){
 
 }
 
-#' Pad image to give size
+#' Pad image to given size
 #'
 #' @param image
 #' @param width
@@ -330,9 +303,9 @@ im_pad <- function(image, width, height, background, out, write = FALSE) {
     padded <- magick::image_border(raw, background, dims)
     padded <- magick::image_crop(padded, desired_dims)
 
-  } else{
-    stop('Supplied width and height are not compatible with image')
-    stop("Desired dimensions are likely too small to pad with")
+  } else {
+    stop('Supplied width and height are not compatible with image \n
+         Desired dimensions are likely too small to pad with')
   }
 
   if (hasArg(out) && write == TRUE) {

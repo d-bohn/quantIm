@@ -7,7 +7,9 @@
 transform_points(landmarks1, landmarks2)
 }
 \arguments{
-\item{landmarks2}{}
+\item{landmarks1}{Reference image to warp to.}
+
+\item{landmarks2}{Image to be warped.}
 }
 \description{
 Create affine transformation

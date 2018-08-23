@@ -15,9 +15,6 @@
 #'
 #' @export
 #' @import ggplot2 grid
-#' @importFrom png readPNG
-#' @importFrom jpeg readJPEG
-#' @importFrom here here
 #' @importFrom RSAGA grid.to.xyz
 #' @importFrom EBImage readImage
 #' @importFrom data.table fread
@@ -30,6 +27,7 @@ im_heatmap <- function(tz_file, base_image, mask, thresh = 1.96, absval = FALSE)
 
   is_df <- length(dim(tz_file))
 
+  # Read in t/z file ----
   # If file supplied is NOT a data frame
   if (hasArg(tz_file) && is.null(dim(is_df))) {
     path <- dirname(tz_file)
@@ -37,6 +35,7 @@ im_heatmap <- function(tz_file, base_image, mask, thresh = 1.96, absval = FALSE)
     savename <- gsub('_average_[t|z]_values', '', z)
     # Make it a df
     df <- data.table::fread(tz_file)
+
     # If it is already, great!
   } else if (hasArg(tz_file) && !is.null(is_df)) {
     path <- getwd()
@@ -46,49 +45,37 @@ im_heatmap <- function(tz_file, base_image, mask, thresh = 1.96, absval = FALSE)
     stop('Please supply valid file or name')
   }
 
-  if (hasArg(base_image)) {
-    ext <- tools::file_ext(base_image)
-  } else {
-    ext <- NULL
-  }
-
-  if ((hasArg(base_image) && ext == 'png') == TRUE) {
-    image <- png::readPNG(base_image)
-    img <- grid::rasterGrob(image, interpolate = TRUE)
-  } else if ((hasArg(base_image) && ext == 'jpg') == TRUE) {
-    image <- jpeg::readJPEG(base_image)
+  # Read in base image ----
+  if (isTRUE(hasArg(base_image))) {
+    image <- quantIm:::read_image(base_image)
     img <- grid::rasterGrob(image, interpolate = TRUE)
   } else {
     stop('Please supply either a .jpg or .png picture file.')
   }
 
-  if (hasArg(mask)) {
-    mext <- tools::file_ext(mask)
+  # Read in mask ----
+  if (isTRUE(hasArg(mask))) {
+    mask_im <- EBImage::readImage(mask)
+    mask_mat <- EBImage::imageData(mask_im)
+  } else if (isFALSE(hasArg(mask))) {
+    mask_im <- 1
   } else {
-    mext <- NULL
-  }
-
-  if (hasArg(mask)) {
-    if((mext == 'png') == TRUE) {
-      mask_im <- EBImage::readImage(mask)
-    } else if ((mext=='jpg')==TRUE) {
-      mask_im <- EBImage::readImage(mask)
-    } else {
-      stop('Please supply either a .jpg or .png mask file.')
-    }
+    stop('Please supply either a .jpg or .png picture file.')
   }
 
   mat <- data.matrix(df)
 
-  if (hasArg(mask)) {
-    mat2 <- mat*mask_im
+  if (isTRUE(hasArg(mask)) & dim(mask_mat)[3] == 2 | is.na(dim(mask_mat)[3])) {
+    mat2 <- mat*mask_mat
+  } else if (isTRUE(hasArg(mask)) & dim(mask_mat)[3] == 3) {
+    mask_mat2 <- mask_mat[,,1]
+    mat2 <- mat*mask_mat2
   } else {
     mat2 <- mat
   }
 
-  mat3 <- mat2
-
-  mat_rotate <- RSAGA::grid.to.xyz(mat3)
+  # Prepare for plotting ----
+  mat_rotate <- RSAGA::grid.to.xyz(mat2)
   data <- as.data.frame(mat_rotate)
 
   data2 <- data
@@ -97,6 +84,7 @@ im_heatmap <- function(tz_file, base_image, mask, thresh = 1.96, absval = FALSE)
 
   g <- grid::rasterGrob(image)
 
+  # Plot and plot function ----
   ggheatmap <- function(data, absval) {
     if (!absval) {
       p <- ggplot2::ggplot(data, ggplot2::aes(x = y, y = x, fill = z2)) +
@@ -150,13 +138,10 @@ im_heatmap <- function(tz_file, base_image, mask, thresh = 1.96, absval = FALSE)
   }
 
   plot <- ggheatmap(data = data2, absval = absval)
-  # plot
 
-  # height = dim(image)[1]*2 + ((dim(image)[1]*2)-((dim(image)[1]*2)*.95))
-  # width = dim(image)[2]*2 + ((dim(image)[2]*2)-((dim(image)[2]*2)*.90))
+  # plot
   height = dim(image)[1]
   width = dim(image)[2]
 
   return(list(heatmap = plot, image = list(width = width, height = height)))
 }
-

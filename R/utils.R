@@ -102,7 +102,7 @@ resize_points <- function(coords, image, width, height){
 plot_landmarks <- function(landmarks=NULL, image, save=NULL){
 
   if (isFALSE(hasArg(landmarks))) {
-    landmarks <- quantIm::get_landmarks(image)[c('point','x','y')]
+    landmarks <- quantIm::read_landmarks(image)[c('point','x','y')]
   } else {
     landmarks <- landmarks[c('point','x','y')]
   }
@@ -156,4 +156,28 @@ plot_landmarks <- function(landmarks=NULL, image, save=NULL){
   points(coords[1:2], pch = 20, col='red')
   points(0,0,col='red',lwd=.5)
 
+}
+
+read_image <- function(x, ...) {
+  m <- tools::file_ext(x)
+  class(x) <- append(m, class(x))
+  if (m == "") class(x) <- append('invalid', class(x)[[1]])
+  UseMethod('read_image', x)
+}
+
+read_image.invalid <- function(x, ...) {
+  stop('Please supply valid unfW file to read. \n',
+       'Acceptable formats: .png, .jpg')
+}
+
+read_image.png <- function(x, ...) {
+  png::readPNG(x, ...)
+}
+
+read_image.jpg <- function(x, ...) {
+  jpeg::readJPEG(x, ...)
+}
+
+read_image.jpeg <- function(x, ...) {
+  jpeg::readJPEG(x, ...)
 }

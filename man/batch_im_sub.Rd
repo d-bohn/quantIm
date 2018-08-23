@@ -7,7 +7,7 @@
 batch_im_sub(files1, files2, save_image, write_data, ...)
 }
 \arguments{
-\item{blur}{}
+\item{...}{Additional arguments to be passed to \code{im_sub}.}
 }
 \value{
 

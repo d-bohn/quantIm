@@ -18,30 +18,26 @@ install_quantIm <- function(){
 
   condaInst <- reticulate::conda_binary()
 
-  if (length(condaInst) != 0){
+  if (length(condaInst) != 0) {
     condaList <- reticulate::conda_list()
-    if(!('quantIm' %in% condaList$name)){
 
+    if (!('quantIm' %in% condaList$name)) {
       reticulate::conda_create(envname = 'quantIm',
                                packages = paks,
                                conda = condaInst)
 
       reticulate::conda_install('quantIm',
-                                'opencv',
+                                c('opencv', 'imagemagick'),
                                 forge = TRUE)
 
       reticulate::conda_install('quantIm',
                                 paks2,
-                                pip=TRUE)
+                                pip = TRUE)
 
     }
-
     else stop('quantIm already installed.')
-
-  } else{
-
-    stop('You must have a valid instalation of conda in order to')
-    stop('install quantIm on this system.')
-}
-
+    } else {
+      stop('You must have a valid instalation of conda in order to \n
+           install quantIm on this system.')
+  }
 }

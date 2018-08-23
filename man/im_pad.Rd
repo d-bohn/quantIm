@@ -2,7 +2,7 @@
 % Please edit documentation in R/r_image_functions.R
 \name{im_pad}
 \alias{im_pad}
-\title{Pad image to give size}
+\title{Pad image to given size}
 \usage{
 im_pad(image, width, height, background, out, write = FALSE)
 }
@@ -10,5 +10,5 @@ im_pad(image, width, height, background, out, write = FALSE)
 \item{write}{}
 }
 \description{
-Pad image to give size
+Pad image to given size
 }

@@ -1,3 +1,44 @@
+#' Get facial landmarks
+#'
+#' @param image Path to image
+#' @param convert Convert output to be R compatible?
+#'
+#' @return Dataframe with 68 face points.
+#'
+#' @importFrom reticulate import source_python
+#'
+#' @examples
+#' img <- system.file("extdata", "obama.png", package = "quantIm")
+#' get_landmarks(img)
+#'
+get_landmarks <- function(image, convert = TRUE) {
+
+  cv <- reticulate::import('cv2', convert = FALSE)
+
+  img <- cv$imread(image)
+
+  py_file <- system.file("python", "get_landmarks.py", package = "quantIm")
+  PREDICTOR_PATH = system.file("extdata", "shape_predictor_68_face_landmarks.dat", package = "quantIm")
+
+  if (convert == TRUE){
+    reticulate::source_python(py_file)
+    x <- get_landmarks(im = img, PREDICTOR_PATH = PREDICTOR_PATH)
+
+    landmarks <- data.frame(image_base = rep(basename(image),68),
+                            image_path = rep(image, 68),
+                            point = seq(0,67),
+                            x = x[,1],
+                            y = x[,2])
+    return(landmarks)
+  }
+  if (convert == FALSE){
+    reticulate::source_python(py_file, convert = FALSE)
+    x <- get_landmarks(im = img, PREDICTOR_PATH = PREDICTOR_PATH)
+    return(x)
+  }
+
+}
+
 #' Warp (affine transform) an image
 #'
 #' @param image1 Path to image to warp.

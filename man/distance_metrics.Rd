@@ -15,8 +15,6 @@ distance_metrics(target, reference, save_id = NULL, to_file = TRUE)
 to full path provided for file if \code{NULL}.}
 
 \item{to_file}{Logical. Should results be written to file or printed in console?}
-
-\item{python}{Which installation of python should be used?}
 }
 \value{
 Returns dataframe with various distance metrics. See details for

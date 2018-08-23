@@ -7,7 +7,9 @@
 warp_face(image, m)
 }
 \arguments{
-\item{m}{}
+\item{image}{Path to/image to be warped.}
+
+\item{m}{Affine matrix.}
 }
 \description{
 Warp image with affine transformation

@@ -5,7 +5,6 @@
 #' @param save_id Regular expression to extract ID from file name. Defaults
 #' to full path provided for file if \code{NULL}.
 #' @param to_file Logical. Should results be written to file or printed in console?
-#' @param python Which installation of python should be used?
 #'
 #' @return Returns dataframe with various distance metrics. See details for
 #' which distance measures are includes.
