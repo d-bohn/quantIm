@@ -12,7 +12,7 @@ def get_landmarks(im, PREDICTOR_PATH):
     predictor = dlib.shape_predictor(PREDICTOR_PATH)
     rects = detector(im, 1)
     if len(rects) > 1:
-        raise TooManyFaces
+        return numpy.matrix([[p.x, p.y] for p in predictor(im, rects[0]).parts()])
     if len(rects) == 0:
         raise NoFaces
     return numpy.matrix([[p.x, p.y] for p in predictor(im, rects[0]).parts()])
