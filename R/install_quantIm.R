@@ -9,7 +9,7 @@
 
 install_quantIm <- function(){
 
-  paks <- c('python=3', 'numpy', 'scipy', 'matplotlib', 'dlib', 'scikit-image',
+  paks <- c('python=3', 'numpy', 'scipy', 'matplotlib', 'scikit-image',
             'Pillow', 'boost', 'Cython', 'gcc')
 
   paks2 <- c('git+https://github.com/garydoranjr/pyemd.git#egg=pyemd',
@@ -27,7 +27,7 @@ install_quantIm <- function(){
                                conda = condaInst)
 
       reticulate::conda_install('quantIm',
-                                c('opencv', 'imagemagick'),
+                                c('opencv', 'imagemagick', 'dlib'),
                                 forge = TRUE)
 
       reticulate::conda_install('quantIm',
