@@ -12,9 +12,11 @@ install_quantIm <- function(){
   paks <- c('python=3', 'numpy', 'scipy', 'matplotlib', 'scikit-image',
             'Pillow', 'boost', 'Cython', 'gcc')
 
-  paks2 <- c('git+https://github.com/garydoranjr/pyemd.git#egg=pyemd',
-             'git+https://github.com/pathak22/pyflow.git#egg=pyflow',
-             'imutils')
+  # paks2 <- c('git+https://github.com/garydoranjr/pyemd.git#egg=pyemd',
+  #            'git+https://github.com/pathak22/pyflow.git#egg=pyflow',
+  #            'imutils')
+
+  paks2 <- c('imutils', 'opencv-contrib-python', 'dlib')
 
   condaInst <- reticulate::conda_binary()
 
@@ -27,7 +29,7 @@ install_quantIm <- function(){
                                conda = condaInst)
 
       reticulate::conda_install('quantIm',
-                                c('opencv', 'imagemagick', 'dlib'),
+                                packages = 'imagemagick',
                                 forge = TRUE)
 
       reticulate::conda_install('quantIm',
