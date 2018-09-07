@@ -61,7 +61,7 @@ read_landmarks.jpg <- function(x, ...) {
                           image_path = rep(x, 68),
                           point = seq(0,67),
                           x = df[,1],
-                          y = f[,2])
+                          y = df[,2])
   class(landmarks) <- append(class(landmarks),"landmarks")
   return(landmarks)
 }
