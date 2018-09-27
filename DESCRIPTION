@@ -1,7 +1,7 @@
 Package: quantIm
 Type: Package
 Title: Quantitative Assesment of Facial Images
-Version: 0.0.1
+Version: 0.1.0
 Author: Daniel N. Albohn
 Maintainer: The package maintainer <dna5021@psu.edu>
 Description: An R package for the quantitative assessment of faces from
@@ -9,12 +9,10 @@ Description: An R package for the quantitative assessment of faces from
     preprocessing, analysis, and displaying. It is a hodge-podge of
     wrappers around other packages that make scientific facial image
     analysis easier.
-License: What license is it under?
+License: GPL- (>=2)
 Encoding: UTF-8
 LazyData: true
 Imports:
     magick,
     dplyr,
-    Rcpp (>= 0.12.10)
-LinkingTo: Rcpp
 RoxygenNote: 6.0.1
