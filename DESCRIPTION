@@ -15,4 +15,21 @@ LazyData: true
 Imports:
     magick,
     dplyr,
+    dtwclust,
+    ggplot2,
+    grid,
+    BSDA,EBImage,
+    RSAGA,
+    RNiftyReg,
+    TSdist,
+    abind,
+    data.table,
+    grid,
+    magick,
+    purrr,
+    readr,
+    reticulate,
+    spatstat,
+    tibble,
+    tools
 RoxygenNote: 6.0.1
